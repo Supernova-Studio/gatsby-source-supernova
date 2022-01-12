@@ -1,0 +1,29 @@
+{
+    "name": "supernova-gatsby-source",
+    "version": "0.1.0",
+    "description": "Supernova SDK bridge for Gatsby graphql engine",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc -b"
+    },
+    "keywords": [
+        "gatsby",
+        "gatsby-plugin"
+    ],
+    "dependencies": {
+        "@supernova-studio/supernova-sdk": "^1.6.10",
+        "slugify": "^1.6.3"
+    },
+    "author": "Jiri Trecak <jiri@supernova.io>, Supernova.io",
+    "devDependencies": {
+        "tsc": "^2.0.3",
+        "typescript": "^4.5.2",
+        "tsconfig-paths": "^3.9.0",
+        "tsconfig-paths-webpack-plugin": "^3.3.0",
+        "webpack": "^5.24.2",
+        "webpack-cli": "^4.5.0",
+        "webpack-node-externals": "^2.5.2",
+        "ts-loader": "^8.0.17"
+    }
+}
