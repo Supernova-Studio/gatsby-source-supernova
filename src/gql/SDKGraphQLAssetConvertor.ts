@@ -9,10 +9,9 @@
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 // MARK: - Imports
 
-import { Asset } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/assets/SDKAsset"
-
+import * as SupernovaSDK from '@supernovaio/supernova-sdk'
 import crypto from 'crypto'
-import { SupernovaTypes } from "../gql_types/SupernovaTypes"
+import { Asset } from 'gql_types/SupernovaTypes'
 
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -33,9 +32,9 @@ export class SDKGraphQLAssetConvertor {
 
   // --- Documentation objects
 
-  assets(sdkAssets: Array<Asset>): Array<SupernovaTypes.Asset> {
+  assets(sdkAssets: Array<SupernovaSDK.Asset>): Array<Asset> {
 
-    let graphQLNodes: Array<SupernovaTypes.Asset> = []
+    let graphQLNodes: Array<Asset> = []
     for (let asset of sdkAssets) {
       const assetNode = {
         id: asset.id,

@@ -9,42 +9,11 @@
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 // MARK: - Imports
 
-import { DocumentationPage } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/SDKDocumentationPage"
-import { DocumentationPageBlock } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/SDKDocumentationPageBlock"
-import { DocumentationPageBlockType } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/enums/SDKDocumentationPageBlockType"
-import { DocumentationPageBlockText } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockText"
-import { DocumentationPageBlockHeading } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockHeading"
-import { DocumentationPageBlockCode } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockCode"
-import { DocumentationPageUnorderedList } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockUnorderedList"
-import { DocumentationPageOrderedList } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockOrderedList"
-import { DocumentationPageBlockQuote } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockQuote"
-import { DocumentationPageBlockCallout } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockCallout"
-import { DocumentationPageBlockDivider } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockDivider"
-import { DocumentationPageBlockImage } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockImage"
-import { DocumentationPageBlockToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockToken"
-import { DocumentationPageBlockTokenList } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockTokenList"
-import { DocumentationPageBlockTokenGroup } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockTokenGroup"
-import { DocumentationPageBlockShortcuts } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockShortcuts"
-import { DocumentationPageBlockShortcut, DocumentationPageBlockShortcutType } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockShortcut"
-import { DocumentationPageBlockEmbedLink } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockEmbedLink"
-import { DocumentationPageBlockEmbedFigma } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockEmbedFigma"
-import { DocumentationPageBlockEmbedYoutube } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockEmbedYoutube"
-import { DocumentationPageBlockEmbedStorybook } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockEmbedStorybook"
-import { DocumentationPageBlockEmbedGeneric } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockEmbedGeneric"
-import { DocumentationPageBlockFrames } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockFrames"
-import { DocumentationPageBlockFrame } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockFrame"
-import { DocumentationPageBlockRenderCode } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockRenderCode"
-import { DocumentationPageBlockCustom } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockCustom"
-import { DocumentationPageBlockAssets } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockAssets"
-import { DocumentationPageBlockAsset } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/blocks/SDKDocumentationPageBlockAsset"
+import * as SupernovaSDK from "@supernovaio/supernova-sdk"
+import { Alignment, RichTextSpanAttributeType, FrameLayout, DocumentationPageBlockType, FrameAlignment, DocumentationPageBlock, DocumentationPageBlockText, DocumentationPageBlockHeading, DocumentationPageBlockCode, DocumentationPageBlockQuote, DocumentationPageBlockCallout, DocumentationPageBlockDivider, DocumentationPageBlockImage, DocumentationPageBlockToken, DocumentationPageBlockTokenList, DocumentationPageBlockTokenGroup, DocumentationPageBlockShortcuts, DocumentationPageBlockEmbedFigma, DocumentationPageBlockEmbedYoutube, DocumentationPageBlockEmbedStorybook, DocumentationPageBlockEmbedGeneric, DocumentationPageBlockFrames, DocumentationPageBlockCustom, DocumentationPageBlockRenderCode, DocumentationPageBlockAssets, DocumentationPageBlockShortcut, DocumentationPageBlockFrame, DocumentationPageBlockAsset, DocumentationPageBlockUnorderedList, DocumentationPageBlockOrderedList, DocumentationPageBlockLink, DocumentationPageBlockTextRich, HeadingType, ShortcutType, CalloutType, SandboxType, CustomBlockPropertyType } from "gql_types/SupernovaTypes"
+import { PARENT_SOURCE } from "./SDKGraphQLAssetConvertor"
+import { SDKGraphQLObjectConvertor } from "./SDKGraphQLObjectConvertor"
 
-import { PARENT_SOURCE, SDKGraphQLObjectConvertor } from "./SDKGraphQLObjectConvertor"
-import { DocumentationRichText } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/SDKDocumentationRichText"
-import { Size } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/support/SDKSize"
-import { DocumentationHeadingType } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/enums/SDKDocumentationHeadingType"
-import { DocumentationCalloutType } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/enums/SDKDocumentationCalloutType"
-import { DocumentationCustomBlockPropertyType } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/custom_blocks/SDKDocumentationCustomBlockProperty"
-import { SupernovaTypes } from "../gql_types/SupernovaTypes"
 
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -54,9 +23,9 @@ export class SDKGraphQLDocBlockConvertor {
 
   // --- Documentation blocks conversion
 
-  documentationPageBlocks(sdkPage: DocumentationPage): Array<SupernovaTypes.DocumentationPageBlock> {
+  documentationPageBlocks(sdkPage: SupernovaSDK.DocumentationPage): Array<DocumentationPageBlock> {
 
-    let graphQLNodes: Array<SupernovaTypes.DocumentationPageBlock> = []
+    let graphQLNodes: Array<DocumentationPageBlock> = []
     let blocks = this.flattenedBlocksOfPage(sdkPage)
     for (let block of blocks) {
       graphQLNodes.push(this.convertBlockToGraphQL(block))
@@ -65,7 +34,7 @@ export class SDKGraphQLDocBlockConvertor {
     return graphQLNodes
   }
 
-  convertBlockToGraphQL(block: DocumentationPageBlock): SupernovaTypes.DocumentationPageBlock {
+  convertBlockToGraphQL(block: SupernovaSDK.DocumentationPageBlock): DocumentationPageBlock {
 
     // Convert base information about blocks
     const blockDescription = {
@@ -76,7 +45,7 @@ export class SDKGraphQLDocBlockConvertor {
       beginsTypeChain: block.beginsTypeChain,
       endsTypeChain: block.endsTypeChain,
       blockIds: block.children.map(c => c.id),
-      blockType: block.type
+      blockType: this.convertBlockType(block.type)
     } 
 
     // Convert all details
@@ -89,64 +58,64 @@ export class SDKGraphQLDocBlockConvertor {
 
   // --- Block specifics
 
-  convertBlockDetailsToGraphQL(block: DocumentationPageBlock, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlock {
+  convertBlockDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlock, baseObject: DocumentationPageBlock): DocumentationPageBlock {
 
     switch (block.type) {
-      case DocumentationPageBlockType.text:
-        return this.convertBlockTextDetailsToGraphQL(block as DocumentationPageBlockText, baseObject)
-      case DocumentationPageBlockType.heading:
-        return this.convertBlockHeadingDetailsToGraphQL(block as DocumentationPageBlockHeading, baseObject)
-      case DocumentationPageBlockType.code:
-        return this.convertBlockCodeDetailsToGraphQL(block as DocumentationPageBlockCode, baseObject)
-      case DocumentationPageBlockType.unorderedList:
-        return this.convertBlockUnorderedListDetailsToGraphQL(block as DocumentationPageUnorderedList, baseObject)
-      case DocumentationPageBlockType.orderedList:
-        return this.convertBlockOrderedListDetailsToGraphQL(block as DocumentationPageOrderedList, baseObject)
-      case DocumentationPageBlockType.quote:
-        return this.convertBlockQuoteDetailsToGraphQL(block as DocumentationPageBlockQuote, baseObject)
-      case DocumentationPageBlockType.callout:
-        return this.convertBlockCalloutDetailsToGraphQL(block as DocumentationPageBlockCallout, baseObject)
-      case DocumentationPageBlockType.divider:
-        return this.convertBlockDividerDetailsToGraphQL(block as DocumentationPageBlockDivider, baseObject)
-      case DocumentationPageBlockType.image:
-        return this.convertBlockImageDetailsToGraphQL(block as DocumentationPageBlockImage, baseObject)
-      case DocumentationPageBlockType.token:
-        return this.convertBlockTokenDetailsToGraphQL(block as DocumentationPageBlockToken, baseObject)
-      case DocumentationPageBlockType.tokenList:
-        return this.convertBlockTokenListDetailsToGraphQL(block as DocumentationPageBlockTokenList, baseObject)
-      case DocumentationPageBlockType.tokenGroup:
-        return this.convertBlockTokenGroupDetailsToGraphQL(block as DocumentationPageBlockTokenGroup, baseObject)
-      case DocumentationPageBlockType.shortcuts:
-        return this.convertBlockShortcutsDetailsToGraphQL(block as DocumentationPageBlockShortcuts, baseObject)
-      case DocumentationPageBlockType.link:
-        return this.convertBlockLinkDetailsToGraphQL(block as DocumentationPageBlockEmbedLink, baseObject)
-      case DocumentationPageBlockType.figmaEmbed:
-        return this.convertBlockFigmaEmbedDetailsToGraphQL(block as DocumentationPageBlockEmbedFigma, baseObject)
-      case DocumentationPageBlockType.youtubeEmbed:
-        return this.convertBlockYoutubeEmbedDetailsToGraphQL(block as DocumentationPageBlockEmbedYoutube, baseObject)
-      case DocumentationPageBlockType.storybookEmbed:
-        return this.convertBlockStorybookEmbedDetailsToGraphQL(block as DocumentationPageBlockEmbedStorybook, baseObject)
-      case DocumentationPageBlockType.genericEmbed:
-        return this.convertBlockGenericEmbedDetailsToGraphQL(block as DocumentationPageBlockEmbedGeneric, baseObject)
-      case DocumentationPageBlockType.figmaFrames:
-        return this.convertBlockFigmaFramesDetailsToGraphQL(block as DocumentationPageBlockFrames, baseObject)
-      case DocumentationPageBlockType.custom:
-        return this.convertBlockCustomDetailsToGraphQL(block as DocumentationPageBlockCustom, baseObject)
-      case DocumentationPageBlockType.renderCode:
-        return this.convertBlockRenderCodeDetailsToGraphQL(block as DocumentationPageBlockRenderCode, baseObject)
-      case DocumentationPageBlockType.componentAssets:
-        return this.convertBlockComponentAssetsDetailsToGraphQL(block as DocumentationPageBlockAssets, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.text:
+        return this.convertBlockTextDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockText, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.heading:
+        return this.convertBlockHeadingDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockHeading, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.code:
+        return this.convertBlockCodeDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockCode, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.unorderedList:
+        return this.convertBlockUnorderedListDetailsToGraphQL(block as SupernovaSDK.DocumentationPageUnorderedList, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.orderedList:
+        return this.convertBlockOrderedListDetailsToGraphQL(block as SupernovaSDK.DocumentationPageOrderedList, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.quote:
+        return this.convertBlockQuoteDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockQuote, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.callout:
+        return this.convertBlockCalloutDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockCallout, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.divider:
+        return this.convertBlockDividerDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockDivider, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.image:
+        return this.convertBlockImageDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockImage, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.token:
+        return this.convertBlockTokenDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockToken, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.tokenList:
+        return this.convertBlockTokenListDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockTokenList, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.tokenGroup:
+        return this.convertBlockTokenGroupDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockTokenGroup, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.shortcuts:
+        return this.convertBlockShortcutsDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockShortcuts, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.link:
+        return this.convertBlockLinkDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockEmbedLink, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.figmaEmbed:
+        return this.convertBlockFigmaEmbedDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockEmbedFigma, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.youtubeEmbed:
+        return this.convertBlockYoutubeEmbedDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockEmbedYoutube, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.storybookEmbed:
+        return this.convertBlockStorybookEmbedDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockEmbedStorybook, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.genericEmbed:
+        return this.convertBlockGenericEmbedDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockEmbedGeneric, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.figmaFrames:
+        return this.convertBlockFigmaFramesDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockFrames, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.custom:
+        return this.convertBlockCustomDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockCustom, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.renderCode:
+        return this.convertBlockRenderCodeDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockRenderCode, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.componentAssets:
+        return this.convertBlockComponentAssetsDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockAssets, baseObject)
     }
   }
 
-  convertBlockTextDetailsToGraphQL(block: DocumentationPageBlockText, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockText {
+  convertBlockTextDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockText, baseObject: DocumentationPageBlock): DocumentationPageBlockText {
     return {
       ...baseObject,
       text: this.convertRichText(block.text),
     }
   }
 
-  convertBlockHeadingDetailsToGraphQL(block: DocumentationPageBlockHeading, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockHeading {
+  convertBlockHeadingDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockHeading, baseObject: DocumentationPageBlock): DocumentationPageBlockHeading {
     return {
       ...baseObject,
       headingType: this.convertBlockHeadingType(block.headingType),
@@ -154,7 +123,7 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockCodeDetailsToGraphQL(block: DocumentationPageBlockCode, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockCode {
+  convertBlockCodeDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockCode, baseObject: DocumentationPageBlock): DocumentationPageBlockCode {
     return {
       ...baseObject,
       codeLanguage: block.codeLanguage,
@@ -163,28 +132,28 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockUnorderedListDetailsToGraphQL(block: DocumentationPageUnorderedList, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockUnorderedList {
+  convertBlockUnorderedListDetailsToGraphQL(block: SupernovaSDK.DocumentationPageUnorderedList, baseObject: DocumentationPageBlock): DocumentationPageBlockUnorderedList {
     return {
       ...baseObject,
       text: this.convertRichText(block.text)
     }
   }
 
-  convertBlockOrderedListDetailsToGraphQL(block: DocumentationPageOrderedList, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockOrderedList {
+  convertBlockOrderedListDetailsToGraphQL(block: SupernovaSDK.DocumentationPageOrderedList, baseObject: DocumentationPageBlock): DocumentationPageBlockOrderedList {
     return {
       ...baseObject,
       text: this.convertRichText(block.text)
     }
   }
 
-  convertBlockQuoteDetailsToGraphQL(block: DocumentationPageBlockQuote, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockQuote {
+  convertBlockQuoteDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockQuote, baseObject: DocumentationPageBlock): DocumentationPageBlockQuote {
     return {
       ...baseObject,
       text: this.convertRichText(block.text)
     }
   }
 
-  convertBlockCalloutDetailsToGraphQL(block: DocumentationPageBlockCallout, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockCallout {
+  convertBlockCalloutDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockCallout, baseObject: DocumentationPageBlock): DocumentationPageBlockCallout {
     return {
       ...baseObject,
       calloutType: this.convertCalloutType(block.calloutType),
@@ -192,36 +161,36 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockDividerDetailsToGraphQL(block: DocumentationPageBlockDivider, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockDivider {
+  convertBlockDividerDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockDivider, baseObject: DocumentationPageBlock): DocumentationPageBlockDivider {
     return {
       ...baseObject
     }
   }
 
-  convertBlockImageDetailsToGraphQL(block: DocumentationPageBlockImage, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockImage {
+  convertBlockImageDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockImage, baseObject: DocumentationPageBlock): DocumentationPageBlockImage {
     return {
       ...baseObject,
       url: block.url ?? null,
       caption: block.caption ?? null,
-      alignment: block.alignment
+      alignment: this.convertAlignment(block.alignment)
     }
   }
 
-  convertBlockTokenDetailsToGraphQL(block: DocumentationPageBlockToken, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockToken {
+  convertBlockTokenDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockToken, baseObject: DocumentationPageBlock): DocumentationPageBlockToken {
     return {
       ...baseObject,
       tokenId: block.tokenId ?? null
     }
   }
 
-  convertBlockTokenListDetailsToGraphQL(block: DocumentationPageBlockTokenList, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockTokenList {
+  convertBlockTokenListDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockTokenList, baseObject: DocumentationPageBlock): DocumentationPageBlockTokenList {
     return {
       ...baseObject,
       tokenIds: block.tokenIds
     }
   }
 
-  convertBlockTokenGroupDetailsToGraphQL(block: DocumentationPageBlockTokenGroup, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockTokenGroup {
+  convertBlockTokenGroupDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockTokenGroup, baseObject: DocumentationPageBlock): DocumentationPageBlockTokenGroup {
     return {
       ...baseObject,
       groupId: block.groupId ?? null,
@@ -229,14 +198,14 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockShortcutsDetailsToGraphQL(block: DocumentationPageBlockShortcuts, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockShortcuts {
+  convertBlockShortcutsDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockShortcuts, baseObject: DocumentationPageBlock): DocumentationPageBlockShortcuts {
     return {
       ...baseObject,
-      shortcuts: block.shortcuts.map(s => this.convertBlockShortcutDetailsToGraphQL(s as DocumentationPageBlockShortcut)) // TODO: Fix incorrect type in SDK so it doesn't have to be enforced
+      shortcuts: block.shortcuts.map(s => this.convertBlockShortcutDetailsToGraphQL(s as SupernovaSDK.DocumentationPageBlockShortcut)) // TODO: Fix incorrect type in SDK so it doesn't have to be enforced
     }
   }
 
-  convertBlockShortcutDetailsToGraphQL(shortcut: DocumentationPageBlockShortcut): SupernovaTypes.DocumentationPageBlockShortcut {
+  convertBlockShortcutDetailsToGraphQL(shortcut: SupernovaSDK.DocumentationPageBlockShortcut): DocumentationPageBlockShortcut {
     return {
       title: shortcut.title ?? null,
       description: shortcut.description ?? null,
@@ -247,7 +216,7 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockLinkDetailsToGraphQL(block: DocumentationPageBlockEmbedLink, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockLink {
+  convertBlockLinkDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockEmbedLink, baseObject: DocumentationPageBlock): DocumentationPageBlockLink {
     return {
       ...baseObject,
       title: block.title ?? null,
@@ -259,7 +228,7 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockFigmaEmbedDetailsToGraphQL(block: DocumentationPageBlockEmbedFigma, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockEmbedFigma {
+  convertBlockFigmaEmbedDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockEmbedFigma, baseObject: DocumentationPageBlock): DocumentationPageBlockEmbedFigma {
     return {
       ...baseObject,
       url: block.url ?? null,
@@ -268,7 +237,7 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockYoutubeEmbedDetailsToGraphQL(block: DocumentationPageBlockEmbedYoutube, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockEmbedYoutube {
+  convertBlockYoutubeEmbedDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockEmbedYoutube, baseObject: DocumentationPageBlock): DocumentationPageBlockEmbedYoutube {
     return {
       ...baseObject,
       url: block.url ?? null,
@@ -277,7 +246,7 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockStorybookEmbedDetailsToGraphQL(block: DocumentationPageBlockEmbedStorybook, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockEmbedStorybook {
+  convertBlockStorybookEmbedDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockEmbedStorybook, baseObject: DocumentationPageBlock): DocumentationPageBlockEmbedStorybook {
     return {
       ...baseObject,
       url: block.url ?? null,
@@ -286,7 +255,7 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockGenericEmbedDetailsToGraphQL(block: DocumentationPageBlockEmbedGeneric, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockEmbedGeneric {
+  convertBlockGenericEmbedDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockEmbedGeneric, baseObject: DocumentationPageBlock): DocumentationPageBlockEmbedGeneric {
     return {
       ...baseObject,
       url: block.url ?? null,
@@ -295,19 +264,19 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockFigmaFramesDetailsToGraphQL(block: DocumentationPageBlockFrames, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockFrames {
+  convertBlockFigmaFramesDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockFrames, baseObject: DocumentationPageBlock): DocumentationPageBlockFrames {
     return {
       ...baseObject,
       frames: block.frames.map(f => this.convertBlockFigmaFrameDetailsToGraphQL(f)),
       properties: {
         backgroundColor: block.properties.color ?? null,
-        alignment: block.properties.alignment ?? null,
-        layout: block.properties.layout,
+        alignment: this.convertFrameAlignment(block.properties.alignment),
+        layout: this.convertLayout(block.properties.layout),
       }
     }
   }
 
-  convertBlockFigmaFrameDetailsToGraphQL(block: DocumentationPageBlockFrame): SupernovaTypes.DocumentationPageBlockFrame {
+  convertBlockFigmaFrameDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockFrame): DocumentationPageBlockFrame {
     return {
       sourceFileId: block.sourceFileId ?? null,
       sourceFrameId: block.sourceFrameId ?? null,
@@ -319,7 +288,7 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockCustomDetailsToGraphQL(block: DocumentationPageBlockCustom, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockCustom {
+  convertBlockCustomDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockCustom, baseObject: DocumentationPageBlock): DocumentationPageBlockCustom {
     return {
       ...baseObject,
       key: block.key,
@@ -343,10 +312,10 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockRenderCodeDetailsToGraphQL(block: DocumentationPageBlockRenderCode, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockRenderCode {
+  convertBlockRenderCodeDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockRenderCode, baseObject: DocumentationPageBlock): DocumentationPageBlockRenderCode {
     return {
       ...baseObject,
-      alignment: block.alignment,
+      alignment: this.convertAlignment(block.alignment),
       backgroundColor: block.backgroundColor ?? null,
       showCode: block.showCode,
       code: block.code,
@@ -357,19 +326,19 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockComponentAssetsDetailsToGraphQL(block: DocumentationPageBlockAssets, baseObject: SupernovaTypes.DocumentationPageBlock): SupernovaTypes.DocumentationPageBlockAssets {
+  convertBlockComponentAssetsDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockAssets, baseObject: DocumentationPageBlock): DocumentationPageBlockAssets {
     return {
       ...baseObject,
       assets: block.assets.map(a => this.convertBlockAssetDetailsToGraphQL(a)),
       properties: {
         color: block.properties.color ?? null,
-        alignment: block.properties.alignment ?? null,
-        layout: block.properties.layout,
+        alignment: this.convertFrameAlignment(block.properties.alignment),
+        layout: this.convertLayout(block.properties.layout),
       }
     }
   }
 
-  convertBlockAssetDetailsToGraphQL(block: DocumentationPageBlockAsset): SupernovaTypes.DocumentationPageBlockAsset {
+  convertBlockAssetDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockAsset): DocumentationPageBlockAsset {
     
     return {
       assetId: block.assetId,
@@ -382,7 +351,7 @@ export class SDKGraphQLDocBlockConvertor {
 
   // --- Subconversions
 
-  convertRichText(richText: DocumentationRichText): SupernovaTypes.DocumentationPageBlockTextRich {
+  convertRichText(richText: SupernovaSDK.DocumentationRichText): DocumentationPageBlockTextRich {
 
     // Replicate raw rich text structure
     return {
@@ -392,7 +361,7 @@ export class SDKGraphQLDocBlockConvertor {
           attributes: s.attributes.map(a => {
             return {
               link: a.link ?? null,
-              type: a.type
+              type: this.convertRichAttributeType(a.type)
             }
           })
         }
@@ -401,7 +370,7 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertSize(size: Size | null): { width: number | null, height: number | null } {
+  convertSize(size: SupernovaSDK.Size | null): { width: number | null, height: number | null } {
 
     if (size) {
       return {
@@ -415,63 +384,134 @@ export class SDKGraphQLDocBlockConvertor {
     }
   }
 
-  convertBlockHeadingType(headingType: DocumentationHeadingType): SupernovaTypes.HeadingType {
+  convertBlockHeadingType(headingType: SupernovaSDK.DocumentationHeadingType): HeadingType {
 
     switch (headingType) {
-      case DocumentationHeadingType.h1: return SupernovaTypes.HeadingType.h1
-      case DocumentationHeadingType.h2: return SupernovaTypes.HeadingType.h2
-      case DocumentationHeadingType.h3: return SupernovaTypes.HeadingType.h3
+      case SupernovaSDK.DocumentationHeadingType.h1: return HeadingType.h1
+      case SupernovaSDK.DocumentationHeadingType.h2: return HeadingType.h2
+      case SupernovaSDK.DocumentationHeadingType.h3: return HeadingType.h3
     }
   }
 
-  convertShortcutType(shortcutType: DocumentationPageBlockShortcutType): SupernovaTypes.ShortcutType {
+  convertShortcutType(shortcutType: SupernovaSDK.DocumentationPageBlockShortcutType): ShortcutType {
 
     switch (shortcutType) {
-      case DocumentationPageBlockShortcutType.external: return SupernovaTypes.ShortcutType.External
-      case DocumentationPageBlockShortcutType.internal: return SupernovaTypes.ShortcutType.Internal
+      case SupernovaSDK.DocumentationPageBlockShortcutType.external: return ShortcutType.External
+      case SupernovaSDK.DocumentationPageBlockShortcutType.internal: return ShortcutType.Internal
     }
   }
 
-  convertCalloutType(calloutType: DocumentationCalloutType): SupernovaTypes.CalloutType {
+  convertCalloutType(calloutType: SupernovaSDK.DocumentationCalloutType): CalloutType {
 
     switch (calloutType) {
-      case DocumentationCalloutType.error: return SupernovaTypes.CalloutType.error
-      case DocumentationCalloutType.info: return SupernovaTypes.CalloutType.info
-      case DocumentationCalloutType.success: return SupernovaTypes.CalloutType.success
-      case DocumentationCalloutType.warning: return SupernovaTypes.CalloutType.warning
+      case SupernovaSDK.DocumentationCalloutType.error: return CalloutType.error
+      case SupernovaSDK.DocumentationCalloutType.info: return CalloutType.info
+      case SupernovaSDK.DocumentationCalloutType.success: return CalloutType.success
+      case SupernovaSDK.DocumentationCalloutType.warning: return CalloutType.warning
     }
   }
 
-  convertSandboxType(sandboxType: any): SupernovaTypes.SandboxType {
+  convertSandboxType(sandboxType: any): SandboxType {
 
     // Static for now
-    return SupernovaTypes.SandboxType.React
+    return SandboxType.React
   }
 
-  convertCustomBlockPropertyType(propType: DocumentationCustomBlockPropertyType): SupernovaTypes.CustomBlockPropertyType {
+  convertCustomBlockPropertyType(propType: SupernovaSDK.DocumentationCustomBlockPropertyType): CustomBlockPropertyType {
     switch (propType) {
-      case DocumentationCustomBlockPropertyType.boolean: return SupernovaTypes.CustomBlockPropertyType.boolean
-      case DocumentationCustomBlockPropertyType.enum: return SupernovaTypes.CustomBlockPropertyType.enum
-      case DocumentationCustomBlockPropertyType.image: return SupernovaTypes.CustomBlockPropertyType.image
-      case DocumentationCustomBlockPropertyType.number: return SupernovaTypes.CustomBlockPropertyType.number
-      case DocumentationCustomBlockPropertyType.string: return SupernovaTypes.CustomBlockPropertyType.string
+      case SupernovaSDK.DocumentationCustomBlockPropertyType.boolean: return CustomBlockPropertyType.boolean
+      case SupernovaSDK.DocumentationCustomBlockPropertyType.enum: return CustomBlockPropertyType.enum
+      case SupernovaSDK.DocumentationCustomBlockPropertyType.image: return CustomBlockPropertyType.image
+      case SupernovaSDK.DocumentationCustomBlockPropertyType.number: return CustomBlockPropertyType.number
+      case SupernovaSDK.DocumentationCustomBlockPropertyType.string: return CustomBlockPropertyType.string
+    }
+  }
+
+  convertAlignment(alignment: SupernovaSDK.Alignment): Alignment {
+
+    switch (alignment) {
+      case SupernovaSDK.Alignment.center: return Alignment.center 
+      case SupernovaSDK.Alignment.left: return Alignment.left 
+      case SupernovaSDK.Alignment.stretch: return Alignment.stretch 
+    }
+  }
+
+  convertFrameAlignment(alignment: SupernovaSDK.FrameAlignment): FrameAlignment {
+
+    switch (alignment) {
+      case SupernovaSDK.FrameAlignment.center: return FrameAlignment.center 
+      case SupernovaSDK.FrameAlignment.frameHeight: return FrameAlignment.frameHeight
+    }
+  }
+
+  convertRichAttributeType(type: SupernovaSDK.RichTextSpanAttributeType): RichTextSpanAttributeType {
+
+    switch (type) {
+      case SupernovaSDK.RichTextSpanAttributeType.bold: return RichTextSpanAttributeType.bold 
+      case SupernovaSDK.RichTextSpanAttributeType.italic: return RichTextSpanAttributeType.italic 
+      case SupernovaSDK.RichTextSpanAttributeType.link: return RichTextSpanAttributeType.link 
+      case SupernovaSDK.RichTextSpanAttributeType.code: return RichTextSpanAttributeType.code
+      case SupernovaSDK.RichTextSpanAttributeType.strikethrough: return RichTextSpanAttributeType.strikethrough 
+    }
+  }
+
+  convertLayout(layout: SupernovaSDK.FrameLayout): FrameLayout {
+
+    switch (layout) {
+      case SupernovaSDK.FrameLayout.c1: return FrameLayout.c1
+      case SupernovaSDK.FrameLayout.c175: return FrameLayout.c175
+      case SupernovaSDK.FrameLayout.c2: return FrameLayout.c2
+      case SupernovaSDK.FrameLayout.c3: return FrameLayout.c3
+      case SupernovaSDK.FrameLayout.c4: return FrameLayout.c4
+      case SupernovaSDK.FrameLayout.c5: return FrameLayout.c5
+      case SupernovaSDK.FrameLayout.c6: return FrameLayout.c6
+      case SupernovaSDK.FrameLayout.c7: return FrameLayout.c7
+      case SupernovaSDK.FrameLayout.c8: return FrameLayout.c8
+    }
+  }
+
+  convertBlockType(type: SupernovaSDK.DocumentationPageBlockType): DocumentationPageBlockType {
+
+    switch (type) {
+      case SupernovaSDK.DocumentationPageBlockType.code: return DocumentationPageBlockType.code
+      case SupernovaSDK.DocumentationPageBlockType.componentAssets: return DocumentationPageBlockType.componentAssets
+      case SupernovaSDK.DocumentationPageBlockType.custom: return DocumentationPageBlockType.custom
+      case SupernovaSDK.DocumentationPageBlockType.callout: return DocumentationPageBlockType.callout
+      case SupernovaSDK.DocumentationPageBlockType.divider: return DocumentationPageBlockType.divider
+      case SupernovaSDK.DocumentationPageBlockType.figmaEmbed: return DocumentationPageBlockType.figmaEmbed
+      case SupernovaSDK.DocumentationPageBlockType.figmaFrames: return DocumentationPageBlockType.figmaFrames
+      case SupernovaSDK.DocumentationPageBlockType.genericEmbed: return DocumentationPageBlockType.genericEmbed
+      case SupernovaSDK.DocumentationPageBlockType.heading: return DocumentationPageBlockType.heading
+      case SupernovaSDK.DocumentationPageBlockType.image: return DocumentationPageBlockType.image
+      case SupernovaSDK.DocumentationPageBlockType.link: return DocumentationPageBlockType.link
+      case SupernovaSDK.DocumentationPageBlockType.orderedList: return DocumentationPageBlockType.orderedList
+      case SupernovaSDK.DocumentationPageBlockType.quote: return DocumentationPageBlockType.quote
+      case SupernovaSDK.DocumentationPageBlockType.renderCode: return DocumentationPageBlockType.renderCode
+      case SupernovaSDK.DocumentationPageBlockType.shortcuts: return DocumentationPageBlockType.shortcuts
+      case SupernovaSDK.DocumentationPageBlockType.storybookEmbed: return DocumentationPageBlockType.storybookEmbed
+      case SupernovaSDK.DocumentationPageBlockType.text: return DocumentationPageBlockType.text
+      case SupernovaSDK.DocumentationPageBlockType.token: return DocumentationPageBlockType.token
+      case SupernovaSDK.DocumentationPageBlockType.tokenGroup: return DocumentationPageBlockType.tokenGroup
+      case SupernovaSDK.DocumentationPageBlockType.tokenList: return DocumentationPageBlockType.tokenList
+      case SupernovaSDK.DocumentationPageBlockType.unorderedList: return DocumentationPageBlockType.unorderedList
+      case SupernovaSDK.DocumentationPageBlockType.youtubeEmbed: return DocumentationPageBlockType.youtubeEmbed
     }
   }
 
   // --- Convenience
 
-  flattenedBlocksOfPage(page: DocumentationPage): Array<DocumentationPageBlock> {
+  flattenedBlocksOfPage(page: SupernovaSDK.DocumentationPage): Array<SupernovaSDK.DocumentationPageBlock> {
 
-    let blocks: Array<DocumentationPageBlock> = []
+    let blocks: Array<SupernovaSDK.DocumentationPageBlock> = []
     for (let block of page.blocks) {
       blocks = blocks.concat(this.flattenedBlocksOfBlock(block))
     }
     return blocks
   }
 
-  flattenedBlocksOfBlock(block: DocumentationPageBlock): Array<DocumentationPageBlock> {
+  flattenedBlocksOfBlock(block: SupernovaSDK.DocumentationPageBlock): Array<SupernovaSDK.DocumentationPageBlock> {
 
-    let blocks: Array<DocumentationPageBlock> = [block]
+    let blocks: Array<SupernovaSDK.DocumentationPageBlock> = [block]
     for (let child of block.children) {
       blocks = blocks.concat(this.flattenedBlocksOfBlock(child))
     }

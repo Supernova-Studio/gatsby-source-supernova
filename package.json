@@ -1,18 +1,27 @@
 {
-    "name": "supernova-gatsby-source",
-    "version": "0.1.0",
-    "description": "Supernova SDK bridge for Gatsby graphql engine",
-    "main": "index.js",
+    "name": "@supernovaio/gatsby-source-supernova",
+    "version": "0.6.4",
+    "description": "Supernova source plugin for building design system documentation websites using Supernova design system platform",
+    "main": "build/gatsby-source-supernova.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc -b"
+        "build": "tsc -b",
+        "build:main": "webpack --mode development --config ./webpack.config.main.js",
+        "deploy-package": "npm run build:main && npm publish --access public"
     },
     "keywords": [
         "gatsby",
-        "gatsby-plugin"
+        "gatsby-plugin",
+        "gatsby-source-plugin",
+        "Design System",
+        "Design Systems",
+        "Documentation"
     ],
+    "license": "MIT",
     "dependencies": {
-        "@supernova-studio/supernova-sdk": "^1.6.10",
+        "@supernovaio/supernova-sdk": "^1.6.15",
+        "crypto": "^1.0.1",
+        "crypto-browserify": "^3.12.0",
         "slugify": "^1.6.3"
     },
     "author": "Jiri Trecak <jiri@supernova.io>, Supernova.io",
@@ -25,5 +34,12 @@
         "webpack-cli": "^4.5.0",
         "webpack-node-externals": "^2.5.2",
         "ts-loader": "^8.0.17"
-    }
+    },
+    "typings": "build/exports.d.ts",
+    "repository": "https://github.com/Supernova-Studio/Pulsar",
+    "files": [
+        "index.js",
+        "gatsby-node.js",
+        "build/"
+    ]
 }

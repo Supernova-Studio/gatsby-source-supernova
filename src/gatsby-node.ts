@@ -9,7 +9,7 @@
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 // MARK: - Imports
 
-import { Supernova } from '@supernova-studio/supernova-sdk'
+import { Supernova } from '@supernovaio/supernova-sdk'
 import { SupernovaPluginOptions } from './types'
 import { SDKGraphQLBridge } from './gql/SDKGraphQLBridge'
 
@@ -17,7 +17,7 @@ import { SDKGraphQLBridge } from './gql/SDKGraphQLBridge'
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 // MARK: - GraphQL Node Processing
 
-exports.sourceNodes = async ({ actions }: { actions: any }, pluginOptions: SupernovaPluginOptions) => {
+export async function sourceNodes({ actions }: { actions: any }, pluginOptions: SupernovaPluginOptions) {
 
   // Create Supernova instance, connect it and create data bridge
   let instance = new Supernova(pluginOptions.apiToken, null, null)
@@ -56,12 +56,82 @@ exports.sourceNodes = async ({ actions }: { actions: any }, pluginOptions: Super
   return
 }
 
-exports.createSchemaCustomization = ({ actions }: { actions: any }) => {
+export async function createSchemaCustomization({ actions }: { actions: any }) {
 
   const { createTypes } = actions
 
   // Note: Hard-coped from gql-types.graphql. Keep both updated until we load it dynamically
   const typeDefs = `
+
+  type Workspace implements Node @dontInfer {
+    id: String!
+    handle: String!
+    name: String!
+    color: String
+  }
+
+  type DesignSystem implements Node @dontInfer {
+    id: String!
+    workspaceId: String!
+    name: String!
+    description: String
+    isPublic: Boolean
+  }
+
+  type DesignSystemVersion implements Node @dontInfer {
+    id: String!
+    designSystemId: String!
+    name: String!
+    description: String
+    version: String!
+    changeLog: String
+    isReadOnly: Boolean
+  }
+
+  type Brand implements Node @dontInfer {
+    id: String!
+    name: String!
+  }
+
+  type DocumentationItem implements Node @dontInfer {
+    persistentId: String!
+    title: String!
+    configuration: DocumentationItemConfiguration
+    itemType: String!
+    slug: String!
+    firstPageSlug: String
+    parentGroupId: String
+    parentGroupChain: [String]!
+
+    # Group
+    isRoot: Boolean
+    subpageIds: [String]
+    subgroupIds: [String]
+    subitemIds: [String]
+    groupBehavior: String
+
+    # Page
+    blockIds: [String]
+  }
+
+  type DocumentationItemConfiguration {
+    header: DocumentationItemHeader!
+    showSidebar: Boolean!
+  }
+
+  type DocumentationItemHeader {
+    backgroundImageAssetUrl: String
+    backgroundImageAssetId: String
+    backgroundImageScaleType: String!
+    description: String
+    alignment: String!
+    foregroundColor: String
+    backgroundColor: String
+    showBackgroundOverlay: Boolean!
+    showCoverText: Boolean!
+    minHeight: Float
+  }
+
   type DocumentationBlock implements Node @dontInfer {
     beginsTypeChain: Boolean!
     endsTypeChain: Boolean!

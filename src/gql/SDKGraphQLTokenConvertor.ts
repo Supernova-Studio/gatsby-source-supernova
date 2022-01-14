@@ -9,29 +9,10 @@
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 // MARK: - Imports
 
-import { CustomTokenPropertyType } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/enums/SDKCustomTokenPropertyType"
-import { ShadowType } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/enums/SDKShadowType"
-import { SourceType } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/enums/SDKSourceType"
-import { TextCase } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/enums/SDKTextCase"
-import { TextDecoration } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/enums/SDKTextDecoration"
-import { TokenType } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/enums/SDKTokenType"
-import { TokenGroup } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/groups/SDKTokenGroup"
-import { BlurToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKBlurToken"
-import { BorderToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKBorderToken"
-import { ColorToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKColorToken"
-import { FontToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKFontToken"
-import { GenericToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKGenericToken"
-import { GradientToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKGradientToken"
-import { MeasureToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKMeasureToken"
-import { RadiusToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKRadiusToken"
-import { ShadowToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKShadowToken"
-import { TextToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKTextToken"
-import { Token } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKToken"
-import { TokenProperty } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKTokenProperty"
-import { GradientStopValue } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKTokenValue"
-import { TypographyToken } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/tokens/SDKTypographyToken"
-import { SupernovaTypes } from "../gql_types/SupernovaTypes"
+import * as SupernovaSDK from "@supernovaio/supernova-sdk"
+import { TokenPropertyType, BorderPosition, ColorToken, BlurToken, BorderToken, FontToken, GenericToken, GradientToken, MeasureToken, RadiusToken, ShadowToken, TextToken, TypographyToken, TokenGroup, SourceType, ShadowType, TextCase, TextDecoration, TokenProperty, GradientStopValue, GradientType, Unit, Token, TokenType, BlurType } from "../gql_types/SupernovaTypes"
 import { SDKGraphQLObjectConvertor } from "./SDKGraphQLObjectConvertor"
+
 
   
 const PARENT_SOURCE: string = "__SOURCE__"
@@ -44,9 +25,9 @@ export class SDKGraphQLTokenConvertor {
 
   // --- Token conversion
 
-  tokens(sdkTokens: Array<Token>): Array<SupernovaTypes.Token> {
+  tokens(sdkTokens: Array<SupernovaSDK.Token>): Array<Token> {
 
-    let graphQLNodes: Array<SupernovaTypes.Token> = []
+    let graphQLNodes: Array<Token> = []
     for (let token of sdkTokens) {
       graphQLNodes.push(this.convertTokenToGraphQL(token))
     }
@@ -54,7 +35,7 @@ export class SDKGraphQLTokenConvertor {
     return graphQLNodes
   }
 
-  convertTokenToGraphQL(token: Token): SupernovaTypes.Token {
+  convertTokenToGraphQL(token: SupernovaSDK.Token): Token {
 
     // Convert base information about tokens
     const tokenDescription = {
@@ -84,25 +65,25 @@ export class SDKGraphQLTokenConvertor {
 
   // --- Token specifics
 
-  convertTokenDetailsToGraphQL(token: Token, baseObject: SupernovaTypes.Token): SupernovaTypes.Token {
+  convertTokenDetailsToGraphQL(token: SupernovaSDK.Token, baseObject: Token): Token {
 
     switch (token.tokenType) {
-        case TokenType.color: return this.convertTokenColorDetailsToGraphQL(token as ColorToken, baseObject)
-        case TokenType.blur: return this.convertTokenBlurDetailsToGraphQL(token as BlurToken, baseObject)
-        case TokenType.border: return this.convertTokenBorderDetailsToGraphQL(token as BorderToken, baseObject)
-        case TokenType.font: return this.convertTokenFontDetailsToGraphQL(token as FontToken, baseObject)
-        case TokenType.generic: return this.convertTokenGenericDetailsToGraphQL(token as GenericToken, baseObject)
-        case TokenType.gradient: return this.convertTokenGradientDetailsToGraphQL(token as GradientToken, baseObject)
-        case TokenType.measure: return this.convertTokenMeasureDetailsToGraphQL(token as MeasureToken, baseObject)
-        case TokenType.radius: return this.convertTokenRadiusDetailsToGraphQL(token as RadiusToken, baseObject)
-        case TokenType.shadow: return this.convertTokenShadowDetailsToGraphQL(token as ShadowToken, baseObject)
-        case TokenType.text: return this.convertTokenTextDetailsToGraphQL(token as TextToken, baseObject)
-        case TokenType.typography: return this.convertTokenTypographyDetailsToGraphQL(token as TypographyToken, baseObject)
+        case SupernovaSDK.TokenType.color: return this.convertTokenColorDetailsToGraphQL(token as SupernovaSDK.ColorToken, baseObject)
+        case SupernovaSDK.TokenType.blur: return this.convertTokenBlurDetailsToGraphQL(token as SupernovaSDK.BlurToken, baseObject)
+        case SupernovaSDK.TokenType.border: return this.convertTokenBorderDetailsToGraphQL(token as SupernovaSDK.BorderToken, baseObject)
+        case SupernovaSDK.TokenType.font: return this.convertTokenFontDetailsToGraphQL(token as SupernovaSDK.FontToken, baseObject)
+        case SupernovaSDK.TokenType.generic: return this.convertTokenGenericDetailsToGraphQL(token as SupernovaSDK.GenericToken, baseObject)
+        case SupernovaSDK.TokenType.gradient: return this.convertTokenGradientDetailsToGraphQL(token as SupernovaSDK.GradientToken, baseObject)
+        case SupernovaSDK.TokenType.measure: return this.convertTokenMeasureDetailsToGraphQL(token as SupernovaSDK.MeasureToken, baseObject)
+        case SupernovaSDK.TokenType.radius: return this.convertTokenRadiusDetailsToGraphQL(token as SupernovaSDK.RadiusToken, baseObject)
+        case SupernovaSDK.TokenType.shadow: return this.convertTokenShadowDetailsToGraphQL(token as SupernovaSDK.ShadowToken, baseObject)
+        case SupernovaSDK.TokenType.text: return this.convertTokenTextDetailsToGraphQL(token as SupernovaSDK.TextToken, baseObject)
+        case SupernovaSDK.TokenType.typography: return this.convertTokenTypographyDetailsToGraphQL(token as SupernovaSDK.TypographyToken, baseObject)
         default: throw new Error("Unsupported token type encountered")
     }
   }
 
-  convertTokenGradientDetailsToGraphQL(token: GradientToken, baseObject: SupernovaTypes.Token): SupernovaTypes.GradientToken {
+  convertTokenGradientDetailsToGraphQL(token: SupernovaSDK.GradientToken, baseObject: Token): GradientToken {
     return {
         ...baseObject,
         value: {
@@ -114,7 +95,7 @@ export class SDKGraphQLTokenConvertor {
                 x: token.value.to.x,
                 y: token.value.to.y,
             },
-            type: token.value.type,
+            type: this.convertGradientType(token.value.type),
             aspectRatio: token.value.aspectRatio,
             stops: token.value.stops.map(s => this.convertTokenGradientStopToGraphQL(s)),
             referencedTokenId: token.value.referencedToken ? token.value.referencedToken.id : null
@@ -122,7 +103,7 @@ export class SDKGraphQLTokenConvertor {
     } 
   }
 
-  convertTokenGradientStopToGraphQL(gradientStop: GradientStopValue): SupernovaTypes.GradientStopValue {
+  convertTokenGradientStopToGraphQL(gradientStop: SupernovaSDK.GradientStopValue): GradientStopValue {
     return {
         position: gradientStop.position,
         color: {
@@ -137,7 +118,7 @@ export class SDKGraphQLTokenConvertor {
   }
 
 
-  convertTokenTypographyDetailsToGraphQL(token: TypographyToken, baseObject: SupernovaTypes.Token): SupernovaTypes.TypographyToken {
+  convertTokenTypographyDetailsToGraphQL(token: SupernovaSDK.TypographyToken, baseObject: Token): TypographyToken {
     return {
         ...baseObject,
         value: {
@@ -148,24 +129,24 @@ export class SDKGraphQLTokenConvertor {
             },
             fontSize: {
                 measure: token.value.fontSize.measure,
-                unit: token.value.fontSize.unit,
+                unit: this.convertUnit(token.value.fontSize.unit),
                 referencedTokenId: token.value.fontSize.referencedToken ? token.value.fontSize.referencedToken.id : null
             },
             textDecoration: this.convertTextDecoration(token.value.textDecoration),
             textCase: this.convertTextCase(token.value.textCase),
             letterSpacing: {
                 measure: token.value.letterSpacing.measure,
-                unit: token.value.letterSpacing.unit,
+                unit: this.convertUnit(token.value.letterSpacing.unit),
                 referencedTokenId: token.value.letterSpacing.referencedToken ? token.value.letterSpacing.referencedToken.id : null
             },
             lineHeight: token.value.lineHeight ? {
                 measure: token.value.lineHeight.measure,
-                unit: token.value.lineHeight.unit,
+                unit: this.convertUnit(token.value.lineHeight.unit),
                 referencedTokenId: token.value.lineHeight.referencedToken ? token.value.lineHeight.referencedToken.id : null
             } : null,
             paragraphIndent: {
                 measure: token.value.paragraphIndent.measure,
-                unit: token.value.paragraphIndent.unit,
+                unit: this.convertUnit(token.value.paragraphIndent.unit),
                 referencedTokenId: token.value.paragraphIndent.referencedToken ? token.value.paragraphIndent.referencedToken.id : null
             },
             referencedTokenId: token.value.referencedToken ? token.value.referencedToken.id : null
@@ -173,7 +154,7 @@ export class SDKGraphQLTokenConvertor {
     } 
   }
 
-  convertTokenFontDetailsToGraphQL(token: FontToken, baseObject: SupernovaTypes.Token): SupernovaTypes.FontToken {
+  convertTokenFontDetailsToGraphQL(token: SupernovaSDK.FontToken, baseObject: Token): FontToken {
     return {
         ...baseObject,
         value: {
@@ -184,33 +165,33 @@ export class SDKGraphQLTokenConvertor {
     }  
   }
 
-  convertTokenRadiusDetailsToGraphQL(token: RadiusToken, baseObject: SupernovaTypes.Token): SupernovaTypes.RadiusToken {
+  convertTokenRadiusDetailsToGraphQL(token: SupernovaSDK.RadiusToken, baseObject: Token): RadiusToken {
     return {
         ...baseObject,
         value: {
             radius: {
                 measure: token.value.radius.measure,
-                unit: token.value.radius.unit,
+                unit: this.convertUnit(token.value.radius.unit),
                 referencedTokenId: token.value.radius.referencedToken ? token.value.radius.referencedToken.id : null
             },
                 topLeft: token.value.topLeft ? {
                 measure: token.value.topLeft.measure,
-                unit: token.value.topLeft.unit,
+                unit: this.convertUnit(token.value.topLeft.unit),
                 referencedTokenId: token.value.topLeft.referencedToken ? token.value.topLeft.referencedToken.id : null
             } : null,
                 topRight: token.value.topRight ? {
                 measure: token.value.topRight.measure,
-                unit: token.value.topRight.unit,
+                unit: this.convertUnit(token.value.topRight.unit),
                 referencedTokenId: token.value.topRight.referencedToken ? token.value.topRight.referencedToken.id : null
             } : null,
                 bottomLeft: token.value.bottomLeft ? {
                 measure: token.value.bottomLeft.measure,
-                unit: token.value.bottomLeft.unit,
+                unit: this.convertUnit(token.value.bottomLeft.unit),
                 referencedTokenId: token.value.bottomLeft.referencedToken ? token.value.bottomLeft.referencedToken.id : null
             } : null,
                 bottomRight: token.value.bottomRight ? {
                 measure: token.value.bottomRight.measure,
-                unit: token.value.bottomRight.unit,
+                unit: this.convertUnit(token.value.bottomRight.unit),
                 referencedTokenId: token.value.bottomRight.referencedToken ? token.value.bottomRight.referencedToken.id : null
             } : null,
             referencedTokenId: token.value.referencedToken ? token.value.referencedToken.id : null
@@ -218,7 +199,7 @@ export class SDKGraphQLTokenConvertor {
     }
   }
 
-  convertTokenGenericDetailsToGraphQL(token: GenericToken, baseObject: SupernovaTypes.Token): SupernovaTypes.GenericToken {
+  convertTokenGenericDetailsToGraphQL(token: SupernovaSDK.GenericToken, baseObject: Token): GenericToken {
     return {
         ...baseObject,
         value: {
@@ -228,7 +209,7 @@ export class SDKGraphQLTokenConvertor {
     }
   }
  
-  convertTokenColorDetailsToGraphQL(token: ColorToken, baseObject: SupernovaTypes.Token): SupernovaTypes.ColorToken {
+  convertTokenColorDetailsToGraphQL(token: SupernovaSDK.ColorToken, baseObject: Token): ColorToken {
     return {
       ...baseObject,
       value: {
@@ -242,7 +223,7 @@ export class SDKGraphQLTokenConvertor {
     }
   }
 
-  convertTokenBorderDetailsToGraphQL(token: BorderToken, baseObject: SupernovaTypes.Token): SupernovaTypes.BorderToken {
+  convertTokenBorderDetailsToGraphQL(token: SupernovaSDK.BorderToken, baseObject: Token): BorderToken {
     return {
         ...baseObject,
         value: {
@@ -256,16 +237,16 @@ export class SDKGraphQLTokenConvertor {
             },
             width: {
                 measure: token.value.width.measure,
-                unit: token.value.width.unit,
+                unit: this.convertUnit(token.value.width.unit),
                 referencedTokenId: token.value.width.referencedToken ? token.value.width.referencedToken.id : null
             },
-            position: token.value.position,
+            position: this.convertBorderPosition(token.value.position),
             referencedTokenId: token.value.referencedToken ? token.value.referencedToken.id : null
         }
     }
   }
 
-  convertTokenShadowDetailsToGraphQL(token: ShadowToken, baseObject: SupernovaTypes.Token): SupernovaTypes.ShadowToken {
+  convertTokenShadowDetailsToGraphQL(token: SupernovaSDK.ShadowToken, baseObject: Token): ShadowToken {
     return {
         ...baseObject,
         value: {
@@ -279,22 +260,22 @@ export class SDKGraphQLTokenConvertor {
             },
             x: {
                 measure: token.value.x.measure,
-                unit: token.value.x.unit,
+                unit: this.convertUnit(token.value.x.unit),
                 referencedTokenId: token.value.x.referencedToken ? token.value.x.referencedToken.id : null
             },
             y: {
                 measure: token.value.y.measure,
-                unit: token.value.y.unit,
+                unit: this.convertUnit(token.value.y.unit),
                 referencedTokenId: token.value.y.referencedToken ? token.value.y.referencedToken.id : null
             },
             radius: {
                 measure: token.value.radius.measure,
-                unit: token.value.radius.unit,
+                unit: this.convertUnit(token.value.radius.unit),
                 referencedTokenId: token.value.radius.referencedToken ? token.value.radius.referencedToken.id : null
             },
             spread: {
                 measure: token.value.spread.measure,
-                unit: token.value.spread.unit,
+                unit: this.convertUnit(token.value.spread.unit),
                 referencedTokenId: token.value.spread.referencedToken ? token.value.spread.referencedToken.id : null
             },
             opacity: token.value.opacity,
@@ -304,18 +285,18 @@ export class SDKGraphQLTokenConvertor {
     }
   }
 
-  convertTokenMeasureDetailsToGraphQL(token: MeasureToken, baseObject: SupernovaTypes.Token): SupernovaTypes.MeasureToken {
+  convertTokenMeasureDetailsToGraphQL(token: SupernovaSDK.MeasureToken, baseObject: Token): MeasureToken {
     return {
         ...baseObject,
         value: {
-            unit: token.value.unit,
+            unit: this.convertUnit(token.value.unit),
             measure: token.value.measure,
             referencedTokenId: token.value.referencedToken ? token.value.referencedToken.id : null
         }
     }
   }
 
-  convertTokenTextDetailsToGraphQL(token: TextToken, baseObject: SupernovaTypes.Token): SupernovaTypes.TextToken {
+  convertTokenTextDetailsToGraphQL(token: SupernovaSDK.TextToken, baseObject: Token): TextToken {
     return {
         ...baseObject,
         value: {
@@ -325,16 +306,16 @@ export class SDKGraphQLTokenConvertor {
     }
   }
 
-  convertTokenBlurDetailsToGraphQL(token: BlurToken, baseObject: SupernovaTypes.Token): SupernovaTypes.BlurToken {
+  convertTokenBlurDetailsToGraphQL(token: SupernovaSDK.BlurToken, baseObject: Token): BlurToken {
     return {
         ...baseObject,
         value: {
             radius: {
                 measure: token.value.radius.measure,
-                unit: token.value.radius.unit,
+                unit: this.convertUnit(token.value.radius.unit),
                 referencedTokenId: token.value.radius.referencedToken ? token.value.radius.referencedToken.id : null
             },
-            type: token.value.type,
+            type: this.convertBlurType(token.value.type),
             referencedTokenId: token.value.referencedToken ? token.value.referencedToken.id : null
         }
     }
@@ -342,9 +323,9 @@ export class SDKGraphQLTokenConvertor {
 
   // --- Token group conversion
 
-  tokenGroups(sdkTokenGroups: Array<TokenGroup>): Array<SupernovaTypes.TokenGroup> {
+  tokenGroups(sdkTokenGroups: Array<SupernovaSDK.TokenGroup>): Array<TokenGroup> {
 
-    let graphQLNodes: Array<SupernovaTypes.TokenGroup> = []
+    let graphQLNodes: Array<TokenGroup> = []
     for (let group of sdkTokenGroups) {
       graphQLNodes.push(this.convertTokenGroupToGraphQL(group))
     }
@@ -352,7 +333,7 @@ export class SDKGraphQLTokenConvertor {
     return graphQLNodes
   }
 
-  convertTokenGroupToGraphQL(group: TokenGroup): SupernovaTypes.TokenGroup {
+  convertTokenGroupToGraphQL(group: SupernovaSDK.TokenGroup): TokenGroup {
 
     // Convert base information about tokens
     const tokenGroupDescription = {
@@ -380,77 +361,113 @@ export class SDKGraphQLTokenConvertor {
 
   // --- Subconversions
 
-  convertTokenType(tokenType: TokenType): SupernovaTypes.TokenType {
+  convertBlurType(type: SupernovaSDK.BlurType): BlurType {
+
+    switch (type) {
+      case SupernovaSDK.BlurType.background: return BlurType.background
+      case SupernovaSDK.BlurType.layer: return BlurType.layer
+    }
+  }
+
+  convertBorderPosition(position: SupernovaSDK.BorderPosition): BorderPosition {
+
+    switch (position) {
+      case SupernovaSDK.BorderPosition.center: return BorderPosition.center
+      case SupernovaSDK.BorderPosition.inside: return BorderPosition.inside
+      case SupernovaSDK.BorderPosition.outside: return BorderPosition.outside
+    }
+  }
+
+  convertUnit(unit: SupernovaSDK.Unit): Unit {
+
+    switch (unit) {
+      case SupernovaSDK.Unit.ems: return Unit.ems
+      case SupernovaSDK.Unit.percent: return Unit.percent
+      case SupernovaSDK.Unit.pixels: return Unit.pixels
+      case SupernovaSDK.Unit.points: return Unit.points
+    }
+  }
+
+  convertGradientType(gradientType: SupernovaSDK.GradientType): GradientType {
+
+    switch (gradientType) {
+      case SupernovaSDK.GradientType.angular: return GradientType.angular
+      case SupernovaSDK.GradientType.linear: return GradientType.linear
+      case SupernovaSDK.GradientType.radial: return GradientType.radial
+    }
+  }
+
+  convertTokenType(tokenType: SupernovaSDK.TokenType): TokenType {
 
     switch (tokenType) {
-      case TokenType.color: return SupernovaTypes.TokenType.Color
-      case TokenType.blur: return SupernovaTypes.TokenType.Blur
-      case TokenType.border: return SupernovaTypes.TokenType.Border
-      case TokenType.font: return SupernovaTypes.TokenType.Font
-      case TokenType.generic: return SupernovaTypes.TokenType.Generic
-      case TokenType.gradient: return SupernovaTypes.TokenType.Gradient
-      case TokenType.measure: return SupernovaTypes.TokenType.Measure
-      case TokenType.radius: return SupernovaTypes.TokenType.Radius
-      case TokenType.shadow: return SupernovaTypes.TokenType.Shadow
-      case TokenType.text: return SupernovaTypes.TokenType.Text
-      case TokenType.typography: return SupernovaTypes.TokenType.Typography
+      case SupernovaSDK.TokenType.color: return TokenType.Color
+      case SupernovaSDK.TokenType.blur: return TokenType.Blur
+      case SupernovaSDK.TokenType.border: return TokenType.Border
+      case SupernovaSDK.TokenType.font: return TokenType.Font
+      case SupernovaSDK.TokenType.generic: return TokenType.Generic
+      case SupernovaSDK.TokenType.gradient: return TokenType.Gradient
+      case SupernovaSDK.TokenType.measure: return TokenType.Measure
+      case SupernovaSDK.TokenType.radius: return TokenType.Radius
+      case SupernovaSDK.TokenType.shadow: return TokenType.Shadow
+      case SupernovaSDK.TokenType.text: return TokenType.Text
+      case SupernovaSDK.TokenType.typography: return TokenType.Typography
     }
   }
 
-  convertSourceType(sourceType: SourceType): SupernovaTypes.SourceType {
+  convertSourceType(sourceType: SupernovaSDK.SourceType): SourceType {
 
     switch (sourceType) {
-      case SourceType.supernova: return SupernovaTypes.SourceType.Supernova
-      case SourceType.figma: return SupernovaTypes.SourceType.Figma
+      case SupernovaSDK.SourceType.supernova: return SourceType.Supernova
+      case SupernovaSDK.SourceType.figma: return SourceType.Figma
     }
   }
 
-  convertTokenPropertyType(propertyType: CustomTokenPropertyType): SupernovaTypes.TokenPropertyType {
+  convertTokenPropertyType(propertyType: SupernovaSDK.CustomTokenPropertyType): TokenPropertyType {
 
     switch (propertyType) {
-      case CustomTokenPropertyType.boolean: return SupernovaTypes.TokenPropertyType.Boolean
-      case CustomTokenPropertyType.generic: return SupernovaTypes.TokenPropertyType.Generic
-      case CustomTokenPropertyType.number: return SupernovaTypes.TokenPropertyType.Number
-      case CustomTokenPropertyType.string: return SupernovaTypes.TokenPropertyType.String
+      case SupernovaSDK.CustomTokenPropertyType.boolean: return TokenPropertyType.Boolean
+      case SupernovaSDK.CustomTokenPropertyType.generic: return TokenPropertyType.Generic
+      case SupernovaSDK.CustomTokenPropertyType.number: return TokenPropertyType.Number
+      case SupernovaSDK.CustomTokenPropertyType.string: return TokenPropertyType.String
     }
   }
 
-  convertShadowType(propertyType: ShadowType): SupernovaTypes.ShadowType {
+  convertShadowType(propertyType: SupernovaSDK.ShadowType): ShadowType {
 
     switch (propertyType) {
-      case ShadowType.drop: return SupernovaTypes.ShadowType.Drop
-      case ShadowType.inner: return SupernovaTypes.ShadowType.Inner
+      case SupernovaSDK.ShadowType.drop: return ShadowType.Drop
+      case SupernovaSDK.ShadowType.inner: return ShadowType.Inner
     }
   }
 
-  convertTextCase(textCase: TextCase): SupernovaTypes.TextCase {
+  convertTextCase(textCase: SupernovaSDK.TextCase): TextCase {
 
     switch (textCase) {
-      case TextCase.camel: return SupernovaTypes.TextCase.Camel
-      case TextCase.lower: return SupernovaTypes.TextCase.Lower
-      case TextCase.original: return SupernovaTypes.TextCase.Original
-      case TextCase.upper: return SupernovaTypes.TextCase.Upper
+      case SupernovaSDK.TextCase.camel: return TextCase.Camel
+      case SupernovaSDK.TextCase.lower: return TextCase.Lower
+      case SupernovaSDK.TextCase.original: return TextCase.Original
+      case SupernovaSDK.TextCase.upper: return TextCase.Upper
     }
   }
 
-  convertTextDecoration(textDecoration: TextDecoration): SupernovaTypes.TextDecoration {
+  convertTextDecoration(textDecoration: SupernovaSDK.TextDecoration): TextDecoration {
 
     switch (textDecoration) {
-      case TextDecoration.original: return SupernovaTypes.TextDecoration.Original
-      case TextDecoration.strikethrough: return SupernovaTypes.TextDecoration.Strikethrough
-      case TextDecoration.underline: return SupernovaTypes.TextDecoration.Underline
+      case SupernovaSDK.TextDecoration.original: return TextDecoration.Original
+      case SupernovaSDK.TextDecoration.strikethrough: return TextDecoration.Strikethrough
+      case SupernovaSDK.TextDecoration.underline: return TextDecoration.Underline
     }
   }
 
-  convertTokenProperty(property: TokenProperty): SupernovaTypes.TokenProperty {
+  convertTokenProperty(property: SupernovaSDK.TokenProperty): TokenProperty {
 
     return {
         name: property.name,
         codeName: property.codeName,
         type: this.convertTokenPropertyType(property.type),
-        booleanValue: property.type === CustomTokenPropertyType.boolean ? (property.value as boolean) ?? null : null,
-        stringValue: property.type === CustomTokenPropertyType.string || property.type === CustomTokenPropertyType.generic ? (property.value as string) ?? null : null,
-        numericValue: property.type === CustomTokenPropertyType.number ? (property.value as number) ?? null : null,
+        booleanValue: property.type === SupernovaSDK.CustomTokenPropertyType.boolean ? (property.value as boolean) ?? null : null,
+        stringValue: property.type === SupernovaSDK.CustomTokenPropertyType.string || property.type === SupernovaSDK.CustomTokenPropertyType.generic ? (property.value as string) ?? null : null,
+        numericValue: property.type === SupernovaSDK.CustomTokenPropertyType.number ? (property.value as number) ?? null : null,
     }
   }
 }

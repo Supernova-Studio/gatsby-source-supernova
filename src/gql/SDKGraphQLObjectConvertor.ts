@@ -9,13 +9,9 @@
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 // MARK: - Imports
 
-import { DocumentationItemHeader } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/configuration/SDKDocumentationItemHeader"
-import { DocumentationConfiguration } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/SDKDocumentationConfiguration"
-import { DocumentationGroup } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/SDKDocumentationGroup"
-import { DocumentationPage } from "@supernova-studio/supernova-sdk/build/main/sdk/src/model/documentation/SDKDocumentationPage"
-
+import * as SupernovaSDK from '@supernovaio/supernova-sdk'
 import crypto from 'crypto'
-import { SupernovaTypes } from "../gql_types/SupernovaTypes"
+import { DocumentationGroupBehavior, DocumentationConfiguration, DocumentationGroup, DocumentationItemHeader, DocumentationPage, AssetScaleType, Alignment, DocumentationItemType } from 'gql_types/SupernovaTypes'
 import { UtilsUrls } from "./convenience/UtilsUrls"
 
 
@@ -37,9 +33,9 @@ export class SDKGraphQLObjectConvertor {
 
   // --- Documentation objects
 
-  documentationPages(sdkGroups: Array<DocumentationGroup>, sdkPages: Array<DocumentationPage>): Array<SupernovaTypes.DocumentationPage> {
+  documentationPages(sdkGroups: Array<SupernovaSDK.DocumentationGroup>, sdkPages: Array<SupernovaSDK.DocumentationPage>): Array<DocumentationPage> {
 
-    let graphQLNodes: Array<SupernovaTypes.DocumentationPage> = []
+    let graphQLNodes: Array<DocumentationPage> = []
     for (let page of sdkPages) {
       let header = page.configuration.header
       const pageNode = {
@@ -48,7 +44,7 @@ export class SDKGraphQLObjectConvertor {
         parent: PARENT_SOURCE,
         internal: SDKGraphQLObjectConvertor.nodeInternals("DocumentationItem"),
         children: [],
-        itemType: page.type,
+        itemType: this.convertItemType(page.type),
 
         slug: UtilsUrls.documentationObjectSlug(page),
         firstPageSlug: UtilsUrls.documentationObjectSlug(page), // Note: For page, first page slug is always the page slug itself
@@ -69,9 +65,9 @@ export class SDKGraphQLObjectConvertor {
     return graphQLNodes
   }
 
-  documentationGroups(sdkGroups: Array<DocumentationGroup>): Array<SupernovaTypes.DocumentationGroup> {
+  documentationGroups(sdkGroups: Array<SupernovaSDK.DocumentationGroup>): Array<DocumentationGroup> {
 
-    let graphQLNodes: Array<SupernovaTypes.DocumentationGroup> = []
+    let graphQLNodes: Array<DocumentationGroup> = []
     for (let group of sdkGroups) {
       let header = group.configuration.header
       const groupNode = {
@@ -80,7 +76,7 @@ export class SDKGraphQLObjectConvertor {
         parent: PARENT_SOURCE,
         internal: SDKGraphQLObjectConvertor.nodeInternals("DocumentationItem"),
         children: [],
-        itemType: group.type,
+        itemType: this.convertItemType(group.type),
 
         slug: UtilsUrls.documentationObjectSlug(group),
         firstPageSlug: UtilsUrls.firstPageObjectSlug(group),
@@ -93,7 +89,7 @@ export class SDKGraphQLObjectConvertor {
 
         title: group.title,
         isRoot: group.isRoot,
-        groupBehavior: group.groupBehavior,
+        groupBehavior: this.convertGroupBehavior(group.groupBehavior),
         configuration: {
           showSidebar: group.configuration.showSidebar,
           header: this.documentationItemHeader(header)
@@ -106,14 +102,14 @@ export class SDKGraphQLObjectConvertor {
     return graphQLNodes
   }
 
-  documentationItemHeader(header: DocumentationItemHeader): SupernovaTypes.DocumentationItemHeader {
+  documentationItemHeader(header: SupernovaSDK.DocumentationItemHeader): DocumentationItemHeader {
 
     return {
       backgroundImageAssetUrl: header.backgroundImageAssetUrl,
       backgroundImageAssetId: header.backgroundImageAssetId,
-      backgroundImageScaleType: header.backgroundImageScaleType,
+      backgroundImageScaleType: this.convertBackgroundImageScaleType(header.backgroundImageScaleType),
       description: header.description,
-      alignment: header.alignment,
+      alignment: this.convertAlignment(header.alignment),
       foregroundColor: header.foregroundColor?.value ?? null,
       backgroundColor: header.backgroundColor?.value ?? null,
       showBackgroundOverlay: header.showBackgroundOverlay,
@@ -122,7 +118,7 @@ export class SDKGraphQLObjectConvertor {
     }
   }
 
-  documentationConfiguration(sdkConfiguration: DocumentationConfiguration): SupernovaTypes.DocumentationConfiguration {
+  documentationConfiguration(sdkConfiguration: SupernovaSDK.DocumentationConfiguration): DocumentationConfiguration {
 
     let configurationNode = {
       id: "configuration",
@@ -136,6 +132,41 @@ export class SDKGraphQLObjectConvertor {
 
     configurationNode.internal.contentDigest = SDKGraphQLObjectConvertor.nodeDigest(configurationNode)
     return configurationNode
+  }
+
+  // --- Subconversions
+
+  convertItemType(itemType: SupernovaSDK.DocumentationItemType): DocumentationItemType {
+
+    switch (itemType) {
+      case SupernovaSDK.DocumentationItemType.group: return DocumentationItemType.group 
+      case SupernovaSDK.DocumentationItemType.page: return DocumentationItemType.page
+    }
+  }
+
+  convertBackgroundImageScaleType(scaleType: SupernovaSDK.AssetScaleType): AssetScaleType {
+
+    switch (scaleType) {
+      case SupernovaSDK.AssetScaleType.aspectFill: return AssetScaleType.aspectFill 
+      case SupernovaSDK.AssetScaleType.aspectFit: return AssetScaleType.aspectFit
+    }
+  }
+
+  convertAlignment(alignment: SupernovaSDK.Alignment): Alignment {
+
+    switch (alignment) {
+      case SupernovaSDK.Alignment.center: return Alignment.center 
+      case SupernovaSDK.Alignment.left: return Alignment.left 
+      case SupernovaSDK.Alignment.stretch: return Alignment.stretch 
+    }
+  }
+
+  convertGroupBehavior(groupBehavior: SupernovaSDK.DocumentationGroupBehavior): DocumentationGroupBehavior {
+
+    switch (groupBehavior) {
+      case SupernovaSDK.DocumentationGroupBehavior.group: return DocumentationGroupBehavior.group 
+      case SupernovaSDK.DocumentationGroupBehavior.tabs: return DocumentationGroupBehavior.tabs
+    }
   }
 
   // --- Convenience

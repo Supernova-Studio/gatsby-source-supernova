@@ -8,8 +8,8 @@ const config = {
     target: ['node'],
     entry: './src/exports.ts',
     output: {
-        path: path.resolve(__dirname, 'build/main'),
-        filename: 'supernova.js',
+        path: path.resolve(__dirname, 'build'),
+        filename: 'gatsby-source-supernova.js',
         libraryTarget: 'commonjs',
         devtoolModuleFilenameTemplate: '../[resource-path]'
     },
@@ -19,7 +19,8 @@ const config = {
         plugins: [
             // @ts-ignore
             new TsconfigPathsPlugin.default({})
-        ]
+        ],
+        fallback: { "crypto": require.resolve("crypto-browserify") }
     },
     externals: [nodeExternals()],
     module: {
