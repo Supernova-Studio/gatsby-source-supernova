@@ -1,4 +1,4 @@
-<img src="https://github.com/Supernova-Studio/gastby-source-supernova/blob/main/readme-icon.png?raw=true" alt="Supernova + Gatsby Source Plugin" style="max-width:100%; margin-bottom: 20px;" />
+<img src="https://github.com/Supernova-Studio/gatsby-source-supernova/blob/main/readme-icon.png?raw=true" alt="Supernova + Gatsby Source Plugin" style="max-width:100%; margin-bottom: 20px;" />
 
 # Supernova + Gatsby source plugin
 
@@ -65,7 +65,7 @@ This source plugin works autonomously so there is no work from your side needed.
 
 Because the packages automatically creates all model classes inside GraphQL when it runs, you don't have to worry about attributes not defined in queries if you haven't use them in Supernova just yet. 
 
-You can find full GraphQL interface this plugin creates [here](https://github.com/Supernova-Studio/gastby-source-supernova/blob/main/src/gatsby-gql-types.graphql).
+You can find full GraphQL interface this plugin creates [here](https://github.com/Supernova-Studio/gatsby-source-supernova/blob/main/src/gatsby-gql-types.graphql).
 
 ## Using Typescript
 
