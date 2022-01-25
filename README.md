@@ -63,11 +63,13 @@ To make it easy for you to get all the neccessary information, we have prepared 
 
 This source plugin works autonomously so there is no work from your side needed. It runs in the background before your site builds and downloads all required information about your design system. Then, it converts data to GraphQL and makes them available for querying.
 
-Because we have created an entire type system for this package, you can see all your options [here](https://github.com/Supernova-Studio/gastby-source-supernova/blob/main/src/gatsby-gql-types.graphql).
+Because the packages automatically creates all model classes inside GraphQL when it runs, you don't have to worry about attributes not defined in queries if you haven't use them in Supernova just yet. 
+
+You can find full GraphQL interface this plugin creates [here](https://github.com/Supernova-Studio/gastby-source-supernova/blob/main/src/gatsby-gql-types.graphql).
 
 ## Using Typescript
 
-To make it easier to develop queries and use results from GraphQL, source plugin comes with entire type system prepared for you. 
+To make it easier to develop queries and use results from GraphQL, source plugin comes with the entire type system prepared for you. 
 
 To import the types, we recommend the following:
 
