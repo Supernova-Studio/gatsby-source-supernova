@@ -10,8 +10,9 @@
 // MARK: - Imports
 
 import * as SupernovaSDK from '@supernovaio/supernova-sdk'
+import { ExporterCustomBlockProperty } from '@supernovaio/supernova-sdk'
 import crypto from 'crypto'
-import { DocumentationGroupBehavior, DocumentationConfiguration, DocumentationGroup, DocumentationItemHeader, DocumentationPage, AssetScaleType, Alignment, DocumentationItemType } from 'gql_types/SupernovaTypes'
+import { DocumentationGroupBehavior, DocumentationConfiguration, DocumentationGroup, DocumentationItemHeader, DocumentationPage, AssetScaleType, Alignment, DocumentationItemType, ExporterCustomBlock, ExporterConfigurationProperty, Exporter, ExporterCustomBlockVariant, ExporterCustomBlockMode } from 'gql_types/SupernovaTypes'
 import { UtilsUrls } from "./convenience/UtilsUrls"
 
 
@@ -134,7 +135,109 @@ export class SDKGraphQLObjectConvertor {
     return configurationNode
   }
 
+  exporters(sdkExporters: Array<SupernovaSDK.Exporter>): Array<Exporter> {
+
+    let graphQLNodes: Array<Exporter> = []
+    for (let exporter of sdkExporters) {
+      const exporterNode = {
+        id: exporter.id,
+        parent: PARENT_SOURCE,
+        internal: SDKGraphQLObjectConvertor.nodeInternals("Exporter"),
+        children: [],
+        
+        packageId: exporter.packageId,
+        isPrivate: exporter.isPrivate,
+        isDefaultDocumentationExporter: exporter.isDefaultDocumentationExporter,
+        usesBrands: exporter.usesBrands,
+        name: exporter.name,
+        description: exporter.description,
+        version: exporter.version,
+        author: exporter.author,
+        organization: exporter.organization,
+        homepage: exporter.homepage,
+        readme: exporter.readme,
+        iconURL: exporter.iconURL,
+        tags: exporter.tags,
+        origin: exporter.origin,
+
+        contributes: {
+          customBlocks: this.exporterCustomBlocks(exporter.contributes.blocks),
+          customConfigurationProperties: this.exporterConfigurationProperties(exporter.contributes.configuration),
+          customBlockVariants: this.exporterCustomVariants(exporter.contributes.blockVariants)
+        }
+      }
+      exporterNode.internal.contentDigest = SDKGraphQLObjectConvertor.nodeDigest(exporterNode)
+      graphQLNodes.push(exporterNode)
+    }
+
+    return graphQLNodes
+  }
+
+  exporterCustomBlocks(sdkBlocks: Array<SupernovaSDK.ExporterCustomBlock>): Array<ExporterCustomBlock> {
+
+    let graphQLNodes: Array<ExporterCustomBlock> = []
+    let idC = 0
+    for (let block of sdkBlocks) {
+      const blockNode = {
+        id: `${idC++}`,
+        parent: PARENT_SOURCE,
+        internal: SDKGraphQLObjectConvertor.nodeInternals("ExporterBlock"),
+        children: [],
+
+        key: block.key,
+        title: block.title,
+        description: block.description,
+        category: block.category,
+        iconUrl: block.iconUrl,
+        mode: this.convertBlockMode(block.mode),
+        properties: this.exporterCustomBlockProperties(block.properties)
+      }
+      blockNode.internal.contentDigest = SDKGraphQLObjectConvertor.nodeDigest(blockNode)
+      graphQLNodes.push(blockNode)
+    }
+
+    return graphQLNodes
+  }
+
+  exporterCustomBlockProperties(sdkProperty: Array<SupernovaSDK.ExporterCustomBlockProperty>): Array<ExporterCustomBlockProperty> {
+
+  }
+
+  exporterConfigurationProperties(sdkProperties: Array<SupernovaSDK.ExporterConfigurationProperty>): Array<ExporterConfigurationProperty> {
+
+  }
+
+  exporterCustomVariants(sdkVariants: Array<SupernovaSDK.ExporterCustomBlockVariant>): Array<ExporterCustomBlockVariant> {
+
+    let graphQLNodes: Array<ExporterCustomBlockVariant> = []
+    let idC = 0
+    for (let variant of sdkVariants) {
+      const variantNode = {
+        id: `${idC++}`,
+        parent: PARENT_SOURCE,
+        internal: SDKGraphQLObjectConvertor.nodeInternals("ExporterVariant"),
+        children: [],
+
+        blockKey: variant.blockKey,
+        variantKey: variant.variantKey,
+        name: variant.name,
+        isDefault: variant.isDefault
+      }
+      variantNode.internal.contentDigest = SDKGraphQLObjectConvertor.nodeDigest(variantNode)
+      graphQLNodes.push(variantNode)
+    }
+
+    return graphQLNodes
+  }
+
   // --- Subconversions
+
+  convertBlockMode(mode: SupernovaSDK.ExporterCustomBlockMode): ExporterCustomBlockMode {
+
+    switch (mode) {
+      case SupernovaSDK.ExporterCustomBlockMode.block: return ExporterCustomBlockMode.block
+    }
+  }
 
   convertItemType(itemType: SupernovaSDK.DocumentationItemType): DocumentationItemType {
 

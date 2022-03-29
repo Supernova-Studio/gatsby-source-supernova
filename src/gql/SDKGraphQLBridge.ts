@@ -103,6 +103,30 @@ export class SDKGraphQLBridge {
     }
   }
 
+  /** Build and convert SDK documentation custom blocks */
+  async documentationCustomBlocks(): Promise<{
+    sdkObjects: Array<SupernovaSDK.ExporterCustomBlock>,
+    graphQLNode: Array<ExporterCustomBlock>
+  }> {
+
+  }
+
+  /** Build and convert SDK documentation custom block variants */
+  async documentationCustomBlockVariants(): Promise<{
+    sdkObjects: Array<SupernovaSDK.ExporterCustomBlockVariant>,
+    graphQLNode: Array<ExporterCustomBlockVariant>
+  }> {
+
+  }
+
+  /** Build and convert SDK documentation custom configuration */
+  async documentationCustomConfiguration(): Promise<{
+    sdkObjects: Array<SupernovaSDK.ExporterConfigurationProperty>,
+    graphQLNode: Array<ExporterConfigurationProperty>
+  }> {
+
+  }
+
   /** Build and convert SDK assets */
   async assets(): Promise<{
     sdkObjects: Array<SupernovaSDK.Asset>

@@ -182,6 +182,36 @@ export enum BlurType {
   background = "Background"
 }
 
+export enum ExporterCustomBlockMode {
+  block = "block"
+}
+
+export enum ExporterCustomBlockPropertyType {
+  string = "string",
+  number = "number",
+  boolean = "boolean",
+  enum = "enum",
+  image = "image"
+}
+
+export enum ExporterCustomBlockPropertyInputType {
+  plain = "plain",
+  code = "code"
+}
+
+export enum ExporterConfigurationPropertyType {
+    string = "string",
+    number = "number",
+    boolean = "boolean",
+    enum = "enum",
+    image = "image"
+}
+
+export enum ExporterConfigurationPropertyInputType {
+    plain = "plain",
+    code = "code"
+}
+
 export type GraphQLNode = {
   id: string
   internal: any
@@ -638,10 +668,79 @@ export type BlurTokenValue = {
 }
 
 export type Asset = GraphQLNode & {
-  brandId: string;
-  thumbnailUrl: string | null;
-  name: string;
-  description: string;
-  componentId: string | null;
-  previouslyDuplicatedNames: number;
+  brandId: string
+  thumbnailUrl: string | null
+  name: string
+  description: string
+  componentId: string | null
+  previouslyDuplicatedNames: number
+}
+
+
+export type ExporterCustomBlock = GraphQLNode &  {
+  key: string
+  title: string
+  description: string
+  category: string
+  iconUrl: string | null
+  mode: ExporterCustomBlockMode
+  properties: Array<ExporterCustomBlockProperty>
+}
+
+export type ExporterCustomBlockProperty = {
+  label: string
+  key: string
+  type: ExporterCustomBlockPropertyType
+  inputType: ExporterCustomBlockPropertyInputType
+  isMultiline: boolean
+  default: string | number | boolean | null
+  values: Array<string>
+}
+
+export type ExporterCustomBlockVariant = GraphQLNode & {
+  blockKey: string
+  variantKey: string
+  name: string
+  isDefault: boolean
+}
+
+
+export type ExporterConfigurationProperty = GraphQLNode & {
+  label: string
+  category: string
+  description: string
+  key: string
+  type: ExporterConfigurationPropertyType
+  inputType: ExporterConfigurationPropertyInputType
+  isMultiline: boolean
+  default: string | number | boolean | null
+  value: string | number | boolean | Object | null
+  values: Array<string>
+}
+
+export type Exporter = GraphQLNode & {
+  id: string
+  packageId: string
+  isPrivate: boolean
+  isDefaultDocumentationExporter: boolean
+  usesBrands: boolean
+  name: string
+  description: string | null
+  version: string
+  author: string | null
+  organization: string | null
+  homepage: string | null
+  readme: string | null
+  iconURL: string | null
+  tags: Array<string>
+  origin: {
+    repositoryUrl: string
+    repositoryBranch: string | null;
+    repositoryDirectory: string | null
+  }
+  contributes: {
+    customBlocks: Array<ExporterCustomBlock>
+    customConfigurationProperties: Array<ExporterConfigurationProperty>
+    customBlockVariants: Array<ExporterCustomBlockVariant>
+  }
 }
