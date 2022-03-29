@@ -85,6 +85,13 @@ export enum DocumentationPageBlockType {
   custom = "Custom",
   renderCode = "RenderCode",
   componentAssets = "ComponentAssets",
+  column = "Column",
+  columnItem = "ColumnItem",
+  tabs = "Tabs",
+  tabItem = "TabItem",
+  table = "Table",
+  tableCell = "TableCell",
+  tableRow = "TableRow"
 }
 
 export enum RichTextSpanAttributeType {
@@ -170,6 +177,8 @@ export enum CustomBlockPropertyType {
   boolean = "boolean",
   enum = "enum",
   image = "image",
+  color = "color",
+  typography = "typography"
 }
 
 export enum DocumentationGroupBehavior {
@@ -191,7 +200,9 @@ export enum ExporterCustomBlockPropertyType {
   number = "number",
   boolean = "boolean",
   enum = "enum",
-  image = "image"
+  image = "image",
+  color = "color",
+  typography = "typography"
 }
 
 export enum ExporterCustomBlockPropertyInputType {
@@ -204,7 +215,9 @@ export enum ExporterConfigurationPropertyType {
     number = "number",
     boolean = "boolean",
     enum = "enum",
-    image = "image"
+    image = "image",
+    color = "color",
+    typography = "typography"
 }
 
 export enum ExporterConfigurationPropertyInputType {
@@ -379,7 +392,10 @@ export type DocumentationPageBlockFrames = DocumentationPageBlock & {
   properties: {
     alignment: FrameAlignment
     layout: FrameLayout
-    backgroundColor: string | null
+    backgroundColor: {
+      aliasTo: string | null,
+      value: string | null
+    } | null
   }
 }
 
@@ -391,7 +407,10 @@ export type DocumentationPageBlockFrame = {
   title: string | null
   description: string | null
   previewUrl: string | null
-  backgroundColor: string | null
+  backgroundColor: {
+    aliasTo: string | null,
+    value: string | null
+  } | null
 }
 
 export type DocumentationPageBlockCustom = DocumentationPageBlock & {
@@ -431,7 +450,10 @@ export type DocumentationPageBlockRenderCode = DocumentationPageBlock & {
 export type DocumentationPageBlockAssets = DocumentationPageBlock & {
   assets: Array<DocumentationPageBlockAsset>
   properties: {
-    color: string | null
+    backgroundColor: {
+      aliasTo: string | null,
+      value: string | null
+    } | null
     alignment: FrameAlignment
     layout: FrameLayout
   }
@@ -442,7 +464,10 @@ export type DocumentationPageBlockAsset = {
   title: string | null
   description: string | null
   previewUrl: string | null
-  backgroundColor: string | null
+  backgroundColor: {
+    aliasTo: string | null,
+    value: string | null
+  } | null
 }
 
 export type DocumentationPageBlockShortcuts = DocumentationPageBlock & {
@@ -693,7 +718,7 @@ export type ExporterCustomBlockProperty = {
   type: ExporterCustomBlockPropertyType
   inputType: ExporterCustomBlockPropertyInputType
   isMultiline: boolean
-  default: string | number | boolean | null
+  default: MultitypeValue | null
   values: Array<string>
 }
 
@@ -713,8 +738,8 @@ export type ExporterConfigurationProperty = GraphQLNode & {
   type: ExporterConfigurationPropertyType
   inputType: ExporterConfigurationPropertyInputType
   isMultiline: boolean
-  default: string | number | boolean | null
-  value: string | number | boolean | Object | null
+  default: MultitypeValue | null
+  value: MultitypeValue | null
   values: Array<string>
 }
 
@@ -744,3 +769,21 @@ export type Exporter = GraphQLNode & {
     customBlockVariants: Array<ExporterCustomBlockVariant>
   }
 }
+
+export type MultitypeValue = {
+  stringValue: string | null,
+  booleanValue: boolean | null,
+  numericValue: number | null,
+  imageValue: {
+    assetUrl: string | null,
+    assetId: string | null
+  } | null,
+  colorValue: {
+    aliasTo: string | null,
+    value: string | null
+  } | null
+  typographyValue: {
+    aliasTo: string | null,
+    value: TypographyTokenValue
+  } | null
+} 

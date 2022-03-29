@@ -105,6 +105,20 @@ export class SDKGraphQLDocBlockConvertor {
         return this.convertBlockRenderCodeDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockRenderCode, baseObject)
       case SupernovaSDK.DocumentationPageBlockType.componentAssets:
         return this.convertBlockComponentAssetsDetailsToGraphQL(block as SupernovaSDK.DocumentationPageBlockAssets, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.column:
+        return this.convertBlockColumnToGraphQL(block as SupernovaSDK.DocumentationPageBlockColumn, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.columnItem:
+        return this.convertBlockColumnItemToGraphQL(block as SupernovaSDK.DocumentationPageBlockColumnItem, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.tabs:
+        return this.convertBlockTabsToGraphQL(block as SupernovaSDK.DocumentationPageBlockTab, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.tabItem:
+        return this.convertBlockTabItemToGraphQL(block as SupernovaSDK.DocumentationPageBlockTabItem, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.table:
+        return this.convertBlockTableToGraphQL(block as SupernovaSDK.DocumentationPageBlockTable, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.tableCell:
+        return this.convertBlockTableCellToGraphQL(block as SupernovaSDK.DocumentationPageBlockTableCell, baseObject)
+      case SupernovaSDK.DocumentationPageBlockType.tableRow:
+        return this.convertBlockTableRowToGraphQL(block as SupernovaSDK.DocumentationPageBlockTableRow, baseObject)
     }
   }
 
@@ -269,7 +283,10 @@ export class SDKGraphQLDocBlockConvertor {
       ...baseObject,
       frames: block.frames.map(f => this.convertBlockFigmaFrameDetailsToGraphQL(f)),
       properties: {
-        backgroundColor: block.properties.color ?? null,
+        backgroundColor: block.properties.backgroundColor ? {
+          aliasTo: block.properties.backgroundColor.aliasTo ?? null,
+          value: block.properties.backgroundColor.value ?? null
+        } : null,
         alignment: this.convertFrameAlignment(block.properties.alignment),
         layout: this.convertLayout(block.properties.layout),
       }
@@ -284,7 +301,10 @@ export class SDKGraphQLDocBlockConvertor {
       title: block.title ?? null,
       description: block.description ?? null,
       previewUrl: block.previewUrl ?? null,
-      backgroundColor: block.backgroundColor ?? null
+      backgroundColor: block.backgroundColor ? {
+        aliasTo: block.backgroundColor.aliasTo ?? null,
+        value: block.backgroundColor.value ?? null
+      } : null,
     }
   }
 
@@ -331,7 +351,10 @@ export class SDKGraphQLDocBlockConvertor {
       ...baseObject,
       assets: block.assets.map(a => this.convertBlockAssetDetailsToGraphQL(a)),
       properties: {
-        color: block.properties.color ?? null,
+        backgroundColor: block.properties.backgroundColor ? {
+          aliasTo: block.properties.backgroundColor.aliasTo ?? null,
+          value: block.properties.backgroundColor.value ?? null
+        } : null,
         alignment: this.convertFrameAlignment(block.properties.alignment),
         layout: this.convertLayout(block.properties.layout),
       }
@@ -345,9 +368,62 @@ export class SDKGraphQLDocBlockConvertor {
       title: block.title ?? null,
       description: block.description ?? null,
       previewUrl: block.previewUrl ?? null,
-      backgroundColor: block.backgroundColor ?? null
+      backgroundColor: block.backgroundColor ? {
+        aliasTo: block.backgroundColor.aliasTo ?? null,
+        value: block.backgroundColor.value ?? null
+      } : null,
     }
   }
+
+  convertBlockColumnToGraphQL(block: SupernovaSDK.DocumentationPageBlockColumn): DocumentationPageBlockColumn {
+    
+    return {
+
+    }
+  }
+
+  convertBlockColumnItemToGraphQL(block: SupernovaSDK.DocumentationPageBlockColumnItem): DocumentationPageBlockColumnItem {
+    
+    return {
+
+    }
+  }
+
+  convertBlockTabsToGraphQL(block: SupernovaSDK.DocumentationPageBlockTab): DocumentationPageBlockTabs {
+    
+    return {
+
+    }
+  }
+
+  convertBlockTabItemToGraphQL(block: SupernovaSDK.DocumentationPageBlockTabItem): DocumentationPageBlockTabItem {
+    
+    return {
+
+    }
+  }
+
+  convertBlockTableToGraphQL(block: SupernovaSDK.DocumentationPageBlockTable): DocumentationPageBlockTable {
+    
+    return {
+
+    }
+  }
+
+  convertBlockTableCellToGraphQL(block: SupernovaSDK.DocumentationPageBlockTableCell): DocumentationPageBlockTableCell {
+    
+    return {
+
+    }
+  }
+
+  convertBlockTableRowToGraphQL(block: SupernovaSDK.DocumentationPageBlockTableRow): DocumentationPageBlockTableRow {
+    
+    return {
+
+    }
+  }
+
 
   // --- Subconversions
 
@@ -417,13 +493,15 @@ export class SDKGraphQLDocBlockConvertor {
     return SandboxType.React
   }
 
-  convertCustomBlockPropertyType(propType: SupernovaSDK.DocumentationCustomBlockPropertyType): CustomBlockPropertyType {
+  convertCustomBlockPropertyType(propType: SupernovaSDK.ExporterCustomBlockPropertyType): CustomBlockPropertyType {
     switch (propType) {
-      case SupernovaSDK.DocumentationCustomBlockPropertyType.boolean: return CustomBlockPropertyType.boolean
-      case SupernovaSDK.DocumentationCustomBlockPropertyType.enum: return CustomBlockPropertyType.enum
-      case SupernovaSDK.DocumentationCustomBlockPropertyType.image: return CustomBlockPropertyType.image
-      case SupernovaSDK.DocumentationCustomBlockPropertyType.number: return CustomBlockPropertyType.number
-      case SupernovaSDK.DocumentationCustomBlockPropertyType.string: return CustomBlockPropertyType.string
+      case SupernovaSDK.ExporterCustomBlockPropertyType.boolean: return CustomBlockPropertyType.boolean
+      case SupernovaSDK.ExporterCustomBlockPropertyType.enum: return CustomBlockPropertyType.enum
+      case SupernovaSDK.ExporterCustomBlockPropertyType.image: return CustomBlockPropertyType.image
+      case SupernovaSDK.ExporterCustomBlockPropertyType.number: return CustomBlockPropertyType.number
+      case SupernovaSDK.ExporterCustomBlockPropertyType.string: return CustomBlockPropertyType.string
+      case SupernovaSDK.ExporterCustomBlockPropertyType.color: return CustomBlockPropertyType.color
+      case SupernovaSDK.ExporterCustomBlockPropertyType.typography: return CustomBlockPropertyType.typography
     }
   }
 
@@ -495,6 +573,13 @@ export class SDKGraphQLDocBlockConvertor {
       case SupernovaSDK.DocumentationPageBlockType.tokenList: return DocumentationPageBlockType.tokenList
       case SupernovaSDK.DocumentationPageBlockType.unorderedList: return DocumentationPageBlockType.unorderedList
       case SupernovaSDK.DocumentationPageBlockType.youtubeEmbed: return DocumentationPageBlockType.youtubeEmbed
+      case SupernovaSDK.DocumentationPageBlockType.column: return DocumentationPageBlockType.column
+      case SupernovaSDK.DocumentationPageBlockType.columnItem: return DocumentationPageBlockType.youtubeEmbed
+      case SupernovaSDK.DocumentationPageBlockType.tabs: return DocumentationPageBlockType.youtubeEmbed
+      case SupernovaSDK.DocumentationPageBlockType.tabItem: return DocumentationPageBlockType.youtubeEmbed
+      case SupernovaSDK.DocumentationPageBlockType.table: return DocumentationPageBlockType.youtubeEmbed
+      case SupernovaSDK.DocumentationPageBlockType.tableCell: return DocumentationPageBlockType.youtubeEmbed
+      case SupernovaSDK.DocumentationPageBlockType.tableRow: return DocumentationPageBlockType.youtubeEmbed
     }
   }
 

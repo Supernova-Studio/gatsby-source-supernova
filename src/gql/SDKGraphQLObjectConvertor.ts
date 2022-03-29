@@ -10,9 +10,8 @@
 // MARK: - Imports
 
 import * as SupernovaSDK from '@supernovaio/supernova-sdk'
-import { ExporterCustomBlockProperty } from '@supernovaio/supernova-sdk'
 import crypto from 'crypto'
-import { DocumentationGroupBehavior, DocumentationConfiguration, DocumentationGroup, DocumentationItemHeader, DocumentationPage, AssetScaleType, Alignment, DocumentationItemType, ExporterCustomBlock, ExporterConfigurationProperty, Exporter, ExporterCustomBlockVariant, ExporterCustomBlockMode } from 'gql_types/SupernovaTypes'
+import { DocumentationGroupBehavior, DocumentationConfiguration, DocumentationGroup, DocumentationItemHeader, DocumentationPage, AssetScaleType, Alignment, DocumentationItemType, ExporterCustomBlock, ExporterConfigurationProperty, Exporter, ExporterCustomBlockVariant, ExporterCustomBlockMode, ExporterCustomBlockProperty, ExporterCustomBlockPropertyType, ExporterCustomBlockPropertyInputType, ExporterConfigurationPropertyType, ExporterConfigurationPropertyInputType, MultitypeValue } from 'gql_types/SupernovaTypes'
 import { UtilsUrls } from "./convenience/UtilsUrls"
 
 
@@ -201,10 +200,50 @@ export class SDKGraphQLObjectConvertor {
 
   exporterCustomBlockProperties(sdkProperty: Array<SupernovaSDK.ExporterCustomBlockProperty>): Array<ExporterCustomBlockProperty> {
 
+    let graphQLNodes: Array<ExporterCustomBlockProperty> = []
+    for (let property of sdkProperty) {
+      const propertyNode = {
+        label: property.label,
+        key: property.key,
+        type: this.convertCustomBlockPropertyType(property.type),
+        inputType: this.convertCustomBlockPropertyInputType(property.inputType),
+        isMultiline: property.isMultiline,
+        default: property.hasOwnProperty("default") && property !== null ? this.convertValueToMultitypeValue(property.type, property.default) : null,
+        values: property.values ?? []
+      }
+      graphQLNodes.push(propertyNode)
+    }
+
+    return graphQLNodes
   }
 
   exporterConfigurationProperties(sdkProperties: Array<SupernovaSDK.ExporterConfigurationProperty>): Array<ExporterConfigurationProperty> {
 
+    let graphQLNodes: Array<ExporterConfigurationProperty> = []
+    let idC = 0
+    for (let property of sdkProperties) {
+      const propertyNode = {
+        id: `${idC++}`,
+        parent: PARENT_SOURCE,
+        internal: SDKGraphQLObjectConvertor.nodeInternals("ExporterConfigurationProperty"),
+        children: [],
+
+        label: property.label,
+        category: property.category,
+        description: property.description,
+        key: property.key,
+        type: this.convertExporterConfigurationPropertyType(property.type),
+        inputType: this.convertExporterConfigurationPropertyInputType(property.inputType),
+        isMultiline: property.isMultiline,
+        default: property.hasOwnProperty("default") && property !== null ? this.convertValueToMultitypeValue(property.type, property.default) : null,
+        value: property.hasOwnProperty("value") && property !== null ? this.convertValueToMultitypeValue(property.type, property.value) : null,
+        values: property.values ?? []
+      }
+      propertyNode.internal.contentDigest = SDKGraphQLObjectConvertor.nodeDigest(propertyNode)
+      graphQLNodes.push(propertyNode)
+    }
+
+    return graphQLNodes
   }
 
   exporterCustomVariants(sdkVariants: Array<SupernovaSDK.ExporterCustomBlockVariant>): Array<ExporterCustomBlockVariant> {
@@ -231,6 +270,74 @@ export class SDKGraphQLObjectConvertor {
   }
 
   // --- Subconversions
+
+  convertValueToMultitypeValue(type: SupernovaSDK.ExporterConfigurationPropertyType | SupernovaSDK.ExporterCustomBlockPropertyType, value: any) {
+
+    let multitypeShell: MultitypeValue = {
+      stringValue: null,
+      booleanValue: null,
+      numericValue: null,
+      imageValue: null,
+      colorValue: null,
+      typographyValue: null
+    }
+
+    switch (type) {
+      case "string": multitypeShell.stringValue = value; break
+      case "enum": multitypeShell.stringValue = value; break
+      case "boolean": multitypeShell.booleanValue = value; break
+      case "number": multitypeShell.numericValue = value; break
+      case "image": multitypeShell.imageValue = value; break
+      case "color": multitypeShell.colorValue = value; break
+      case "typography": multitypeShell.typographyValue = value; break
+    }
+
+    return multitypeShell
+  }
+
+
+  convertExporterConfigurationPropertyType(type: SupernovaSDK.ExporterConfigurationPropertyType): ExporterConfigurationPropertyType {
+
+    switch (type) {
+      case SupernovaSDK.ExporterConfigurationPropertyType.boolean: return ExporterConfigurationPropertyType.boolean
+      case SupernovaSDK.ExporterConfigurationPropertyType.enum: return ExporterConfigurationPropertyType.enum
+      case SupernovaSDK.ExporterConfigurationPropertyType.image: return ExporterConfigurationPropertyType.image
+      case SupernovaSDK.ExporterConfigurationPropertyType.number: return ExporterConfigurationPropertyType.number
+      case SupernovaSDK.ExporterConfigurationPropertyType.string: return ExporterConfigurationPropertyType.string
+      case SupernovaSDK.ExporterConfigurationPropertyType.color: return ExporterConfigurationPropertyType.color
+      case SupernovaSDK.ExporterConfigurationPropertyType.typography: return ExporterConfigurationPropertyType.typography
+    }
+  }
+
+  convertExporterConfigurationPropertyInputType(type: SupernovaSDK.ExporterConfigurationPropertyInputType): ExporterConfigurationPropertyInputType {
+
+    switch (type) {
+      case SupernovaSDK.ExporterConfigurationPropertyInputType.code: return ExporterConfigurationPropertyInputType.code
+      case SupernovaSDK.ExporterConfigurationPropertyInputType.plain: return ExporterConfigurationPropertyInputType.plain
+    }
+  }
+
+
+  convertCustomBlockPropertyType(type: SupernovaSDK.ExporterCustomBlockPropertyType): ExporterCustomBlockPropertyType {
+
+    switch (type) {
+      case SupernovaSDK.ExporterCustomBlockPropertyType.boolean: return ExporterCustomBlockPropertyType.boolean
+      case SupernovaSDK.ExporterCustomBlockPropertyType.enum: return ExporterCustomBlockPropertyType.enum
+      case SupernovaSDK.ExporterCustomBlockPropertyType.image: return ExporterCustomBlockPropertyType.image
+      case SupernovaSDK.ExporterCustomBlockPropertyType.number: return ExporterCustomBlockPropertyType.number
+      case SupernovaSDK.ExporterCustomBlockPropertyType.string: return ExporterCustomBlockPropertyType.string
+      case SupernovaSDK.ExporterCustomBlockPropertyType.color: return ExporterCustomBlockPropertyType.color
+      case SupernovaSDK.ExporterCustomBlockPropertyType.typography: return ExporterCustomBlockPropertyType.typography
+    }
+  }
+
+  convertCustomBlockPropertyInputType(type: SupernovaSDK.ExporterCustomBlockPropertyInputType): ExporterCustomBlockPropertyInputType {
+
+    switch (type) {
+      case SupernovaSDK.ExporterCustomBlockPropertyInputType.code: return ExporterCustomBlockPropertyInputType.code
+      case SupernovaSDK.ExporterCustomBlockPropertyInputType.plain: return ExporterCustomBlockPropertyInputType.plain
+    }
+  }
 
   convertBlockMode(mode: SupernovaSDK.ExporterCustomBlockMode): ExporterCustomBlockMode {
 
