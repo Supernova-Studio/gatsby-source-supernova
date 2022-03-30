@@ -488,6 +488,46 @@ export type DocumentationPageBlockShortcut = {
   shortcutType: ShortcutType
 }
 
+export type DocumentationPageBlockColumn = DocumentationPageBlock & {
+  // No extra properties yet
+}
+
+export type DocumentationPageBlockColumnItem = DocumentationPageBlock & {
+  width: MeasureTokenValue
+}
+
+export type DocumentationPageBlockTabs = DocumentationPageBlock & {
+  // No extra properties yet
+}
+
+export type DocumentationPageBlockTabItem = DocumentationPageBlock & {
+  caption: string | null
+}
+
+export type DocumentationPageBlockTable = DocumentationPageBlock & {
+  // No extra properties yet
+  tableProperties: {
+    showBorders: boolean
+    columns: Array<DocumentationPageBlockTableColumn>
+  }
+}
+
+export type DocumentationPageBlockTableCell = DocumentationPageBlock & {
+  // No extra properties yet
+  columnId: string
+  alignment: Alignment
+}
+
+export type DocumentationPageBlockTableRow = DocumentationPageBlock & {
+  // No extra properties yet
+}
+
+export type DocumentationPageBlockTableColumn = {
+  // No extra properties yet
+  id: string
+  width: MeasureTokenValue
+}
+
 export type TokenGroup = GraphQLNode & {
   id: string
   name: string
