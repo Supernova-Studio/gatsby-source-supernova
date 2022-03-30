@@ -10,6 +10,7 @@
 // MARK: - Imports
 
 import * as SupernovaSDK from "@supernovaio/supernova-sdk"
+import { Supernova } from "@supernovaio/supernova-sdk"
 import { DocumentationPage, DocumentationPageBlock, DocumentationGroup, DocumentationConfiguration, Asset, Token, TokenGroup, ExporterCustomBlock, ExporterCustomBlockVariant, ExporterConfigurationProperty } from "../gql_types/SupernovaTypes"
 import { SDKGraphQLAssetConvertor } from "./SDKGraphQLAssetConvertor"
 import { SDKGraphQLDocBlockConvertor } from "./SDKGraphQLDocBlockConvertor"
@@ -24,6 +25,8 @@ export class SDKGraphQLBridge {
 
   // --- Properties
 
+  supernova: SupernovaSDK.Supernova
+  workspace: SupernovaSDK.Workspace
   version: SupernovaSDK.DesignSystemVersion
   documentation: SupernovaSDK.Documentation
   itemConvertor: SDKGraphQLObjectConvertor
@@ -33,7 +36,9 @@ export class SDKGraphQLBridge {
 
   // --- Constructor
 
-  constructor(version: SupernovaSDK.DesignSystemVersion, documentation: SupernovaSDK.Documentation) {
+  constructor(supernova: SupernovaSDK.Supernova, workspace: SupernovaSDK.Workspace, version: SupernovaSDK.DesignSystemVersion, documentation: SupernovaSDK.Documentation) {
+    this.supernova = supernova
+    this.workspace = workspace
     this.version = version
     this.documentation = documentation
     this.itemConvertor = new SDKGraphQLObjectConvertor()
@@ -103,42 +108,57 @@ export class SDKGraphQLBridge {
     }
   }
 
+  /** Build and convert SDK exporters */
+  /*
+  async exporters(): Promise<{
+    sdkObjects: Array<SupernovaSDK.Exporter>,
+    graphQLNodes: Array<Exporter>
+  }> {
+
+    let exporters = await this.workspace.exporters()
+    return {
+      sdkObjects: exporters,
+      graphQLNodes: this.itemConvertor.exporters(exporters)
+    }
+  }
+  */
+
   /** Build and convert SDK documentation custom blocks */
   async documentationCustomBlocks(): Promise<{
     sdkObjects: Array<SupernovaSDK.ExporterCustomBlock>,
-    graphQLNode: Array<ExporterCustomBlock>
+    graphQLNodes: Array<ExporterCustomBlock>
   }> {
 
     let blocks = await this.documentation.customBlocks()
     return {
       sdkObjects: blocks,
-      graphQLNode: this.itemConvertor.exporterCustomBlocks(blocks)
+      graphQLNodes: this.itemConvertor.exporterCustomBlocks(blocks)
     }
   }
 
   /** Build and convert SDK documentation custom block variants */
   async documentationCustomBlockVariants(): Promise<{
     sdkObjects: Array<SupernovaSDK.ExporterCustomBlockVariant>,
-    graphQLNode: Array<ExporterCustomBlockVariant>
+    graphQLNodes: Array<ExporterCustomBlockVariant>
   }> {
 
     let blockVariants = await this.documentation.customBlockVariants()
     return {
       sdkObjects: blockVariants,
-      graphQLNode: this.itemConvertor.exporterCustomVariants(blockVariants)
+      graphQLNodes: this.itemConvertor.exporterCustomVariants(blockVariants)
     }
   }
 
   /** Build and convert SDK documentation custom configuration */
   async documentationCustomConfiguration(): Promise<{
     sdkObjects: Array<SupernovaSDK.ExporterConfigurationProperty>,
-    graphQLNode: Array<ExporterConfigurationProperty>
+    graphQLNodes: Array<ExporterConfigurationProperty>
   }> {
 
     let properties = await this.documentation.customConfiguration()
     return {
       sdkObjects: properties,
-      graphQLNode: this.itemConvertor.exporterConfigurationProperties(properties)
+      graphQLNodes: this.itemConvertor.exporterConfigurationProperties(properties)
     }
   }
 

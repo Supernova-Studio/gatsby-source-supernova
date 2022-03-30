@@ -178,7 +178,7 @@ export class SDKGraphQLObjectConvertor {
     let idC = 0
     for (let block of sdkBlocks) {
       const blockNode = {
-        id: `${idC++}`,
+        id: `custom_block_${idC++}`,
         parent: PARENT_SOURCE,
         internal: SDKGraphQLObjectConvertor.nodeInternals("ExporterBlock"),
         children: [],
@@ -223,7 +223,7 @@ export class SDKGraphQLObjectConvertor {
     let idC = 0
     for (let property of sdkProperties) {
       const propertyNode = {
-        id: `${idC++}`,
+        id: `configuration_property_${idC++}`,
         parent: PARENT_SOURCE,
         internal: SDKGraphQLObjectConvertor.nodeInternals("ExporterConfigurationProperty"),
         children: [],
@@ -252,7 +252,7 @@ export class SDKGraphQLObjectConvertor {
     let idC = 0
     for (let variant of sdkVariants) {
       const variantNode = {
-        id: `${idC++}`,
+        id: `custom_block_variant_${idC++}`,
         parent: PARENT_SOURCE,
         internal: SDKGraphQLObjectConvertor.nodeInternals("ExporterBlockVariant"),
         children: [],

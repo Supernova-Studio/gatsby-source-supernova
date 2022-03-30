@@ -17,7 +17,7 @@ type DesignSystem implements Node @dontInfer {
 type DesignSystemVersion implements Node @dontInfer {
   id: String!
   designSystemId: String!
-  name: string!
+  name: String!
   description: String
   version: String!
   changeLog: String
@@ -102,19 +102,17 @@ type DocumentationBlock implements Node @dontInfer {
   description: String
   thumbnailUrl: String
   columnId: String
-  tableProperties: {
+  tableProperties: DocumentationTableProperties
+}
+
+type DocumentationTableProperties {
     showBorders: Boolean!
     columns: [DocumentationTableColumn]!
-  }
 }
 
 type DocumentationTableColumn {
   id: String
-  width: {
-    measure: Float
-    unit: String!
-    referencedTokenId: String
-  }
+  width: MeasureTokenValue
 }
 
 type DocumentationBlockText @dontInfer {
@@ -226,7 +224,7 @@ type TokenValue {
   b: Int
   a: Int
 
-  # Font token value
+  # Typography token value
   font: FontTokenValue
   fontSize: MeasureTokenValue
   textDecoration: String
@@ -353,19 +351,35 @@ type MultitypeValue {
   stringValue: String
   booleanValue: Boolean
   numericValue: Float
-  imageValue: {
-    assetUrl: String
-    assetId: String
-  }
-  colorValue: {
-    aliasTo: String
-    value: String
-  }
-  typographyValue: {
-    aliasTo: String
-    value: TypographyTokenValue
-  }
+  imageValue: MultitypeImageValue
+  colorValue: MultitypeColorValue
+  typographyValue: MultitypeTypographyValue
 } 
+
+type MultitypeImageValue {
+  assetUrl: String
+  assetId: String
+}
+
+type MultitypeColorValue {
+  aliasTo: String
+  value: String
+}
+
+type MultitypeTypographyValue {
+  aliasTo: String
+  value: TypographyTokenValue
+}
+
+type TypographyTokenValue {
+  font: FontTokenValue
+  fontSize: MeasureTokenValue
+  textDecoration: String
+  textCase: String
+  letterSpacing: MeasureTokenValue
+  lineHeight: MeasureTokenValue
+  paragraphIndent: MeasureTokenValue
+}
 
 type ExporterBlock implements Node @dontInfer {
   key: String!
@@ -373,14 +387,14 @@ type ExporterBlock implements Node @dontInfer {
   description: String
   category: String
   iconUrl: String
-  mode: ExporterCustomBlockMode
+  mode: String
   properties: [ExporterBlockProperty]
 }
 
 type ExporterBlockProperty {
   label: String!
   key: String!
-  type: ExporterCustomBlockPropertyType!
+  type: String!
   inputType: String
   isMultiline: Boolean
   default: MultitypeValue
@@ -423,14 +437,18 @@ type Exporter implements Node @dontInfer {
   readme: String
   iconURL: String
   tags: [String]!
-  origin: {
+  origin: ExporterOrigin!
+  contributes: ExporterContribution!
+}
+
+type ExporterOrigin {
     repositoryUrl: String!
     repositoryBranch: String
     repositoryDirectory: String
-  }!
-  contributes: {
+}
+
+type ExporterContribution {
     customBlocks: [ExporterBlock]!
     customConfigurationProperties: [ExporterConfigurationProperty]!
     customBlockVariants: [ExporterBlockVariant]!
-  }!
 }

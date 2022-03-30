@@ -21,15 +21,16 @@ export async function sourceNodes({ actions }: { actions: any }, pluginOptions: 
 
   // Create Supernova instance, connect it and create data bridge
   let instance = new Supernova(pluginOptions.apiToken, null, null)
+  let workspace = await instance.workspace(pluginOptions.workspaceId)
   // let designSystem = await instance.designSystem(pluginOptions.designSystemId)
   
   let version = await instance.designSystemVersion(pluginOptions.designSystemId, pluginOptions.designSystemVersionId)
-  if (!version) {
-    throw Error("Unable to fetch design system version, please provide connect api key, documentation and version id")
+  if (!version || !workspace) {
+    throw Error("Unable to fetch workspace, design system or design system version, please provide connect api key, documentation and version id")
   }
 
   let docs = await version.documentation()
-  let bridge = new SDKGraphQLBridge(version, docs)
+  let bridge = new SDKGraphQLBridge(instance, workspace, version, docs)
 
   // Create all documentation nodes
   let groupResult = await bridge.documentationGroups()
@@ -49,6 +50,19 @@ export async function sourceNodes({ actions }: { actions: any }, pluginOptions: 
 
   let tokenGroupResult = await bridge.tokenGroups()
   tokenGroupResult.graphQLNodes.forEach(n => actions.createNode(n))
+
+  // TODO: Exporter fetching
+  // let exporterResult = await bridge.exporters()
+  // exporterResult.graphQLNodes.forEach(n => actions.createNode(n))
+
+  let customBlockResult = await bridge.documentationCustomBlocks()
+  customBlockResult.graphQLNodes.forEach(n => actions.createNode(n))
+
+  let customVariantResult = await bridge.documentationCustomBlockVariants()
+  customVariantResult.graphQLNodes.forEach(n => actions.createNode(n))
+
+  let customExporterConfiguration = await bridge.documentationCustomConfiguration()
+  customExporterConfiguration.graphQLNodes.forEach(n => actions.createNode(n))
 
   let configurationResult = await bridge.documentationConfiguration()
   actions.createNode(configurationResult.graphQLNode)
@@ -81,7 +95,7 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
   type DesignSystemVersion implements Node @dontInfer {
     id: String!
     designSystemId: String!
-    name: string!
+    name: String!
     description: String
     version: String!
     changeLog: String
@@ -138,11 +152,11 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     blockIds: [String]!
     blockType: String!
     groupId: String
+    variantKey: String
     showNestedGroups: Boolean
     text: DocumentationBlockText
     calloutType: String
     headingType: Int
-    variantKey: String
     assets: [DocumentationBlockAsset]
     frames: [DocumentationBlockFigmaFrame]
     shortcuts: [DocumentationBlockShortcut]
@@ -166,19 +180,17 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     description: String
     thumbnailUrl: String
     columnId: String
-    tableProperties: {
+    tableProperties: DocumentationTableProperties
+  }
+  
+  type DocumentationTableProperties {
       showBorders: Boolean!
       columns: [DocumentationTableColumn]!
-    }
   }
   
   type DocumentationTableColumn {
     id: String
-    width: {
-      measure: Float
-      unit: String!
-      referencedTokenId: String
-    }
+    width: MeasureTokenValue
   }
   
   type DocumentationBlockText @dontInfer {
@@ -290,7 +302,7 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     b: Int
     a: Int
   
-    # Font token value
+    # Typography token value
     font: FontTokenValue
     fontSize: MeasureTokenValue
     textDecoration: String
@@ -417,19 +429,35 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     stringValue: String
     booleanValue: Boolean
     numericValue: Float
-    imageValue: {
-      assetUrl: String
-      assetId: String
-    }
-    colorValue: {
-      aliasTo: String
-      value: String
-    }
-    typographyValue: {
-      aliasTo: String
-      value: TypographyTokenValue
-    }
+    imageValue: MultitypeImageValue
+    colorValue: MultitypeColorValue
+    typographyValue: MultitypeTypographyValue
   } 
+  
+  type MultitypeImageValue {
+    assetUrl: String
+    assetId: String
+  }
+  
+  type MultitypeColorValue {
+    aliasTo: String
+    value: String
+  }
+  
+  type MultitypeTypographyValue {
+    aliasTo: String
+    value: TypographyTokenValue
+  }
+  
+  type TypographyTokenValue {
+    font: FontTokenValue
+    fontSize: MeasureTokenValue
+    textDecoration: String
+    textCase: String
+    letterSpacing: MeasureTokenValue
+    lineHeight: MeasureTokenValue
+    paragraphIndent: MeasureTokenValue
+  }
   
   type ExporterBlock implements Node @dontInfer {
     key: String!
@@ -437,14 +465,14 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     description: String
     category: String
     iconUrl: String
-    mode: ExporterCustomBlockMode
+    mode: String
     properties: [ExporterBlockProperty]
   }
   
   type ExporterBlockProperty {
     label: String!
     key: String!
-    type: ExporterCustomBlockPropertyType!
+    type: String!
     inputType: String
     isMultiline: Boolean
     default: MultitypeValue
@@ -487,16 +515,20 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     readme: String
     iconURL: String
     tags: [String]!
-    origin: {
+    origin: ExporterOrigin!
+    contributes: ExporterContribution!
+  }
+  
+  type ExporterOrigin {
       repositoryUrl: String!
       repositoryBranch: String
       repositoryDirectory: String
-    }!
-    contributes: {
+  }
+  
+  type ExporterContribution {
       customBlocks: [ExporterBlock]!
       customConfigurationProperties: [ExporterConfigurationProperty]!
       customBlockVariants: [ExporterBlockVariant]!
-    }!
   }
   `
 
