@@ -182,6 +182,7 @@ type DocumentationCustomBlockProperty @dontInfer {
   key: String
   type: String
   default: String
+  value: MultitypeValue
 }
 
 type Asset implements Node @dontInfer {

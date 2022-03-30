@@ -10,7 +10,7 @@
 // MARK: - Imports
 
 import * as SupernovaSDK from "@supernovaio/supernova-sdk"
-import { Unit, Alignment, RichTextSpanAttributeType, FrameLayout, DocumentationPageBlockType, FrameAlignment, DocumentationPageBlock, DocumentationPageBlockText, DocumentationPageBlockHeading, DocumentationPageBlockCode, DocumentationPageBlockQuote, DocumentationPageBlockCallout, DocumentationPageBlockDivider, DocumentationPageBlockImage, DocumentationPageBlockToken, DocumentationPageBlockTokenList, DocumentationPageBlockTokenGroup, DocumentationPageBlockShortcuts, DocumentationPageBlockEmbedFigma, DocumentationPageBlockEmbedYoutube, DocumentationPageBlockEmbedStorybook, DocumentationPageBlockEmbedGeneric, DocumentationPageBlockFrames, DocumentationPageBlockCustom, DocumentationPageBlockRenderCode, DocumentationPageBlockAssets, DocumentationPageBlockShortcut, DocumentationPageBlockFrame, DocumentationPageBlockAsset, DocumentationPageBlockUnorderedList, DocumentationPageBlockOrderedList, DocumentationPageBlockLink, DocumentationPageBlockTextRich, HeadingType, ShortcutType, CalloutType, SandboxType, CustomBlockPropertyType, DocumentationPageBlockColumn, DocumentationPageBlockColumnItem, DocumentationPageBlockTabs, DocumentationPageBlockTabItem, DocumentationPageBlockTable, DocumentationPageBlockTableColumn, DocumentationPageBlockTableRow, DocumentationPageBlockTableCell } from "gql_types/SupernovaTypes"
+import { Unit, Alignment, RichTextSpanAttributeType, FrameLayout, DocumentationPageBlockType, FrameAlignment, DocumentationPageBlock, DocumentationPageBlockText, DocumentationPageBlockHeading, DocumentationPageBlockCode, DocumentationPageBlockQuote, DocumentationPageBlockCallout, DocumentationPageBlockDivider, DocumentationPageBlockImage, DocumentationPageBlockToken, DocumentationPageBlockTokenList, DocumentationPageBlockTokenGroup, DocumentationPageBlockShortcuts, DocumentationPageBlockEmbedFigma, DocumentationPageBlockEmbedYoutube, DocumentationPageBlockEmbedStorybook, DocumentationPageBlockEmbedGeneric, DocumentationPageBlockFrames, DocumentationPageBlockCustom, DocumentationPageBlockRenderCode, DocumentationPageBlockAssets, DocumentationPageBlockShortcut, DocumentationPageBlockFrame, DocumentationPageBlockAsset, DocumentationPageBlockUnorderedList, DocumentationPageBlockOrderedList, DocumentationPageBlockLink, DocumentationPageBlockTextRich, HeadingType, ShortcutType, CalloutType, SandboxType, CustomBlockPropertyType, DocumentationPageBlockColumn, DocumentationPageBlockColumnItem, DocumentationPageBlockTabs, DocumentationPageBlockTabItem, DocumentationPageBlockTable, DocumentationPageBlockTableColumn, DocumentationPageBlockTableRow, DocumentationPageBlockTableCell, DocumentationCustomBlockProperty, MultitypeValue } from "gql_types/SupernovaTypes"
 import { PARENT_SOURCE } from "./SDKGraphQLAssetConvertor"
 import { SDKGraphQLObjectConvertor } from "./SDKGraphQLObjectConvertor"
 
@@ -309,27 +309,53 @@ export class SDKGraphQLDocBlockConvertor {
   }
 
   convertBlockCustomDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockCustom, baseObject: DocumentationPageBlock): DocumentationPageBlockCustom {
-    return {
+
+    let properties = block.block?.properties
+    let convertedProperties: Array<DocumentationCustomBlockProperty> = []
+    for (let p of (properties ?? [])) {
+
+      let propertyValue = undefined
+
+      // Find value first
+      if (properties) {
+        for (let [key, value] of Object.entries(block.properties ?? {})) {
+          if (p.key === key) {
+            propertyValue = value
+            break
+          }
+        }
+      }
+      // Use default if not set
+      if (propertyValue === undefined) {
+        propertyValue = p.default ?? null
+      }
+
+      // Construct property
+      let property = {
+        label: p.label,
+        key: p.key,
+        type: this.convertCustomBlockPropertyType(p.type),
+        values: p.values,
+        default: p.default,
+        value: this.convertValueToMultitypeValue(p.type, propertyValue)
+      } as DocumentationCustomBlockProperty
+      convertedProperties.push(property)
+    }
+
+    let object = {
       ...baseObject,
       key: block.key,
-      properties: block.properties,
+      blockProperties: convertedProperties,
       block: block.block ? {
         key: block.block.key,
         title: block.block.title,
         category: block.block.category,
         description: block.block.description,
-        iconUrl: block.block.iconUrl,
-        properties: block.block.properties.map(p => {
-          return {
-            label: p.label,
-            key: p.key,
-            type: this.convertCustomBlockPropertyType(p.type),
-            values: p.values,
-            default: p.default
-          }
-        })
+        iconUrl: block.block.iconUrl
       } : null
     }
+
+    return object
   }
 
   convertBlockRenderCodeDetailsToGraphQL(block: SupernovaSDK.DocumentationPageBlockRenderCode, baseObject: DocumentationPageBlock): DocumentationPageBlockRenderCode {
@@ -450,6 +476,30 @@ export class SDKGraphQLDocBlockConvertor {
 
 
   // --- Subconversions
+
+  convertValueToMultitypeValue(type: SupernovaSDK.ExporterCustomBlockPropertyType, value: any) {
+
+    let multitypeShell: MultitypeValue = {
+      stringValue: null,
+      booleanValue: null,
+      numericValue: null,
+      imageValue: null,
+      colorValue: null,
+      typographyValue: null
+    }
+
+    switch (type) {
+      case "string": multitypeShell.stringValue = value; break
+      case "enum": multitypeShell.stringValue = value; break
+      case "boolean": multitypeShell.booleanValue = value; break
+      case "number": multitypeShell.numericValue = value; break
+      case "image": multitypeShell.imageValue = value; break
+      case "color": multitypeShell.colorValue = value; break
+      case "typography": multitypeShell.typographyValue = value; break
+    }
+
+    return multitypeShell
+  }
 
   convertRichText(richText: SupernovaSDK.DocumentationRichText): DocumentationPageBlockTextRich {
 

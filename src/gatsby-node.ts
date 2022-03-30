@@ -260,6 +260,7 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     key: String
     type: String
     default: String
+    value: MultitypeValue
   }
   
   type Asset implements Node @dontInfer {

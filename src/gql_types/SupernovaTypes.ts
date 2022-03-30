@@ -416,7 +416,7 @@ export type DocumentationPageBlockFrame = {
 
 export type DocumentationPageBlockCustom = DocumentationPageBlock & {
   key: string
-  properties: Object
+  blockProperties: Array<DocumentationCustomBlockProperty>
   block: DocumentationCustomBlock | null
 }
 
@@ -426,7 +426,6 @@ export type DocumentationCustomBlock = {
   description: string
   category: string
   iconUrl: string | null
-  properties: Array<DocumentationCustomBlockProperty>
 }
 
 export type DocumentationCustomBlockProperty = {
@@ -435,6 +434,7 @@ export type DocumentationCustomBlockProperty = {
   type: CustomBlockPropertyType
   default: string | number | boolean | null
   values: Array<string>
+  value: MultitypeValue
 }
 
 export type DocumentationPageBlockRenderCode = DocumentationPageBlock & {
