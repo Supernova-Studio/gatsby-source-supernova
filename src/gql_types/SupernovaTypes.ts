@@ -290,6 +290,7 @@ export type DocumentationPageBlock = GraphQLNode & {
   blockType: DocumentationPageBlockType
   beginsTypeChain: boolean
   endsTypeChain: boolean
+  variantKey?: string
 }
 
 export type DocumentationPageBlockCallout = DocumentationPageBlockText & {

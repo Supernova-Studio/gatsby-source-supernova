@@ -74,6 +74,7 @@ type DocumentationBlock implements Node @dontInfer {
   blockIds: [String]!
   blockType: String!
   groupId: String
+  variantKey: String
   showNestedGroups: Boolean
   text: DocumentationBlockText
   calloutType: String

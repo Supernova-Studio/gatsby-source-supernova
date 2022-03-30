@@ -142,6 +142,7 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     text: DocumentationBlockText
     calloutType: String
     headingType: Int
+    variantKey: String
     assets: [DocumentationBlockAsset]
     frames: [DocumentationBlockFigmaFrame]
     shortcuts: [DocumentationBlockShortcut]
