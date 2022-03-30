@@ -254,7 +254,7 @@ export class SDKGraphQLObjectConvertor {
       const variantNode = {
         id: `${idC++}`,
         parent: PARENT_SOURCE,
-        internal: SDKGraphQLObjectConvertor.nodeInternals("ExporterVariant"),
+        internal: SDKGraphQLObjectConvertor.nodeInternals("ExporterBlockVariant"),
         children: [],
 
         blockKey: variant.blockKey,

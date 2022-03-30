@@ -69,7 +69,7 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     name: String!
     color: String
   }
-
+  
   type DesignSystem implements Node @dontInfer {
     id: String!
     workspaceId: String!
@@ -77,22 +77,22 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     description: String
     isPublic: Boolean
   }
-
+  
   type DesignSystemVersion implements Node @dontInfer {
     id: String!
     designSystemId: String!
-    name: String!
+    name: string!
     description: String
     version: String!
     changeLog: String
     isReadOnly: Boolean
   }
-
+  
   type Brand implements Node @dontInfer {
     id: String!
     name: String!
   }
-
+  
   type DocumentationItem implements Node @dontInfer {
     persistentId: String!
     title: String!
@@ -102,23 +102,23 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     firstPageSlug: String
     parentGroupId: String
     parentGroupChain: [String]!
-
+  
     # Group
     isRoot: Boolean
     subpageIds: [String]
     subgroupIds: [String]
     subitemIds: [String]
     groupBehavior: String
-
+  
     # Page
     blockIds: [String]
   }
-
+  
   type DocumentationItemConfiguration {
     header: DocumentationItemHeader!
     showSidebar: Boolean!
   }
-
+  
   type DocumentationItemHeader {
     backgroundImageAssetUrl: String
     backgroundImageAssetId: String
@@ -131,7 +131,7 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     showCoverText: Boolean!
     minHeight: Float
   }
-
+  
   type DocumentationBlock implements Node @dontInfer {
     beginsTypeChain: Boolean!
     endsTypeChain: Boolean!
@@ -164,6 +164,20 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     title: String
     description: String
     thumbnailUrl: String
+    columnId: String
+    tableProperties: {
+      showBorders: Boolean!
+      columns: [DocumentationTableColumn]!
+    }
+  }
+  
+  type DocumentationTableColumn {
+    id: String
+    width: {
+      measure: Float
+      unit: String!
+      referencedTokenId: String
+    }
   }
   
   type DocumentationBlockText @dontInfer {
@@ -393,6 +407,95 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     tokenIds: [String]!
     parentId: String
     path: [String]!
+  }
+  
+  
+  # --- Exporters
+  
+  type MultitypeValue {
+    stringValue: String
+    booleanValue: Boolean
+    numericValue: Float
+    imageValue: {
+      assetUrl: String
+      assetId: String
+    }
+    colorValue: {
+      aliasTo: String
+      value: String
+    }
+    typographyValue: {
+      aliasTo: String
+      value: TypographyTokenValue
+    }
+  } 
+  
+  type ExporterBlock implements Node @dontInfer {
+    key: String!
+    title: String!
+    description: String
+    category: String
+    iconUrl: String
+    mode: ExporterCustomBlockMode
+    properties: [ExporterBlockProperty]
+  }
+  
+  type ExporterBlockProperty {
+    label: String!
+    key: String!
+    type: ExporterCustomBlockPropertyType!
+    inputType: String
+    isMultiline: Boolean
+    default: MultitypeValue
+    values: [String]
+  }
+  
+  type ExporterBlockVariant implements Node @dontInfer {
+    blockKey: String!
+    variantKey: String!
+    name: String!
+    isDefault: Boolean!
+  }
+  
+  
+  type ExporterConfigurationProperty implements Node @dontInfer {
+    label: String!
+    category: String!
+    description: String
+    key: String!
+    type: String!
+    inputType: String
+    isMultiline: Boolean
+    default: MultitypeValue
+    value: MultitypeValue
+    values: [String]
+  }
+  
+  type Exporter implements Node @dontInfer {
+    id: String!
+    packageId: String!
+    isPrivate: Boolean!
+    isDefaultDocumentationExporter: Boolean!
+    usesBrands: Boolean!
+    name: String!
+    description: String
+    version: String!
+    author: String
+    organization: String
+    homepage: String
+    readme: String
+    iconURL: String
+    tags: [String]!
+    origin: {
+      repositoryUrl: String!
+      repositoryBranch: String
+      repositoryDirectory: String
+    }!
+    contributes: {
+      customBlocks: [ExporterBlock]!
+      customConfigurationProperties: [ExporterConfigurationProperty]!
+      customBlockVariants: [ExporterBlockVariant]!
+    }!
   }
   `
 
