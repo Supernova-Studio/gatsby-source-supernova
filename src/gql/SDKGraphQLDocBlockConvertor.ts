@@ -45,7 +45,8 @@ export class SDKGraphQLDocBlockConvertor {
       beginsTypeChain: block.beginsTypeChain,
       endsTypeChain: block.endsTypeChain,
       blockIds: block.children.map(c => c.id),
-      blockType: this.convertBlockType(block.type)
+      blockType: this.convertBlockType(block.type),
+      variantKey: block.variantKey
     } 
 
     // Convert all details
@@ -421,14 +422,14 @@ export class SDKGraphQLDocBlockConvertor {
   }
 
   convertBlockTabsToGraphQL(block: SupernovaSDK.DocumentationPageBlockTab, baseObject: DocumentationPageBlock): DocumentationPageBlockTabs {
-    
+ 
     return {
       ...baseObject
     }
   }
 
   convertBlockTabItemToGraphQL(block: SupernovaSDK.DocumentationPageBlockTabItem, baseObject: DocumentationPageBlock): DocumentationPageBlockTabItem {
-    
+  
     return {
       ...baseObject,
       caption: block.caption
@@ -648,12 +649,12 @@ export class SDKGraphQLDocBlockConvertor {
       case SupernovaSDK.DocumentationPageBlockType.unorderedList: return DocumentationPageBlockType.unorderedList
       case SupernovaSDK.DocumentationPageBlockType.youtubeEmbed: return DocumentationPageBlockType.youtubeEmbed
       case SupernovaSDK.DocumentationPageBlockType.column: return DocumentationPageBlockType.column
-      case SupernovaSDK.DocumentationPageBlockType.columnItem: return DocumentationPageBlockType.youtubeEmbed
-      case SupernovaSDK.DocumentationPageBlockType.tabs: return DocumentationPageBlockType.youtubeEmbed
-      case SupernovaSDK.DocumentationPageBlockType.tabItem: return DocumentationPageBlockType.youtubeEmbed
-      case SupernovaSDK.DocumentationPageBlockType.table: return DocumentationPageBlockType.youtubeEmbed
-      case SupernovaSDK.DocumentationPageBlockType.tableCell: return DocumentationPageBlockType.youtubeEmbed
-      case SupernovaSDK.DocumentationPageBlockType.tableRow: return DocumentationPageBlockType.youtubeEmbed
+      case SupernovaSDK.DocumentationPageBlockType.columnItem: return DocumentationPageBlockType.columnItem
+      case SupernovaSDK.DocumentationPageBlockType.tabs: return DocumentationPageBlockType.tabs
+      case SupernovaSDK.DocumentationPageBlockType.tabItem: return DocumentationPageBlockType.tabItem
+      case SupernovaSDK.DocumentationPageBlockType.table: return DocumentationPageBlockType.table
+      case SupernovaSDK.DocumentationPageBlockType.tableCell: return DocumentationPageBlockType.tableCell
+      case SupernovaSDK.DocumentationPageBlockType.tableRow: return DocumentationPageBlockType.tableRow
     }
   }
 

@@ -48,6 +48,8 @@ type DocumentationItem implements Node @dontInfer {
 
   # Page
   blockIds: [String]
+  nextPageId: String
+  previousPageId: String
 }
 
 type DocumentationItemConfiguration {
@@ -90,6 +92,7 @@ type DocumentationBlock implements Node @dontInfer {
   alignment: String
   key: String
   block: DocumentationCustomBlock
+  blockProperties: [DocumentationCustomBlockProperty]
   backgroundColor: String
   showCode: Boolean
   code: String
@@ -174,7 +177,6 @@ type DocumentationCustomBlock @dontInfer {
   category: String
   description: String
   iconUrl: String
-  properties: [DocumentationCustomBlockProperty]
 }
 
 type DocumentationCustomBlockProperty @dontInfer {

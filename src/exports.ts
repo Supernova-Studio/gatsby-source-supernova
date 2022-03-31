@@ -112,5 +112,9 @@ export {
   GenericTokenValue,
   BlurTokenValue,
   Asset,
+  MultitypeValue,
+  MultitypeColorValue,
+  MultitypeImageValue,
+  MultitypeTypographyValue
 } from "./gql_types/SupernovaTypes"
 export { sourceNodes, createSchemaCustomization } from "./gatsby-node"

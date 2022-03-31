@@ -272,6 +272,8 @@ export type DocumentationGroup = DocumentationItem & {
 
 export type DocumentationPage = DocumentationItem & {
   blockIds: Array<string>
+  nextPageId: string | null
+  previousPageId: string | null
 }
 
 export type DocumentationConfiguration = {
@@ -815,16 +817,22 @@ export type MultitypeValue = {
   stringValue: string | null,
   booleanValue: boolean | null,
   numericValue: number | null,
-  imageValue: {
-    assetUrl: string | null,
-    assetId: string | null
-  } | null,
-  colorValue: {
-    aliasTo: string | null,
-    value: string | null
-  } | null
-  typographyValue: {
-    aliasTo: string | null,
-    value: TypographyTokenValue
-  } | null
+  imageValue: MultitypeImageValue | null,
+  colorValue: MultitypeColorValue | null
+  typographyValue: MultitypeTypographyValue | null
 } 
+
+export type MultitypeImageValue = {
+  assetUrl: string | null,
+  assetId: string | null
+}
+
+export type MultitypeColorValue = {
+  aliasTo: string | null,
+  value: string | null
+}
+
+export type MultitypeTypographyValue = {
+  aliasTo: string | null,
+  value: TypographyTokenValue
+}

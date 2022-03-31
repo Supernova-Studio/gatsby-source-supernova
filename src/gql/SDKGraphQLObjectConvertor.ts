@@ -50,6 +50,8 @@ export class SDKGraphQLObjectConvertor {
         firstPageSlug: UtilsUrls.documentationObjectSlug(page), // Note: For page, first page slug is always the page slug itself
         parentGroupId: page.parent?.id ?? null,
         parentGroupChain: UtilsUrls.groupChainUntilRoot(page),
+        previousPageId: UtilsUrls.previousPage(sdkGroups, page)?.id ?? null,
+        nextPageId: UtilsUrls.nextPage(sdkGroups, page)?.id ?? null,
 
         title: page.title,
         blockIds: page.blocks.map(b => b.id),
@@ -82,6 +84,8 @@ export class SDKGraphQLObjectConvertor {
         firstPageSlug: UtilsUrls.firstPageObjectSlug(group),
         parentGroupId: group.parent?.id ?? null,
         parentGroupChain: UtilsUrls.groupChainUntilRoot(group),
+        previousPageId: null,
+        nextPageId: null,
 
         subpageIds: group.pages.map(p => p.id),
         subgroupIds: group.subgroups.map(g => g.id),

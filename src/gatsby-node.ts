@@ -126,6 +126,8 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
   
     # Page
     blockIds: [String]
+    nextPageId: String
+    previousPageId: String
   }
   
   type DocumentationItemConfiguration {
@@ -168,6 +170,7 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     alignment: String
     key: String
     block: DocumentationCustomBlock
+    blockProperties: [DocumentationCustomBlockProperty]
     backgroundColor: String
     showCode: Boolean
     code: String
@@ -252,7 +255,6 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
     category: String
     description: String
     iconUrl: String
-    properties: [DocumentationCustomBlockProperty]
   }
   
   type DocumentationCustomBlockProperty @dontInfer {
