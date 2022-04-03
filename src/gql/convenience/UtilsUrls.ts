@@ -11,6 +11,7 @@
 
 import * as SupernovaSDK from "@supernovaio/supernova-sdk"
 import slugify from "slugify"
+import { UtilsLookup } from "./UtilLookup"
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
 // MARK: - Template implementation
@@ -91,25 +92,12 @@ export class UtilsUrls {
     throw new Error("Root group was not found, which can never happen")
   }
 
-  static flattenedPageStructure(root: SupernovaSDK.DocumentationGroup): Array<SupernovaSDK.DocumentationPage> {
-    let pages: Array<SupernovaSDK.DocumentationPage> = []
-    for (let item of root.children) {
-      if (item.type === "Page") {
-        pages.push(item as SupernovaSDK.DocumentationPage)
-      } else if (item.type === "Group") {
-        pages = pages.concat(UtilsUrls.flattenedPageStructure(item as SupernovaSDK.DocumentationGroup))
-      }
-    }
-
-    return pages
-  }
-
   static previousPage(
     sdkGroups: Array<SupernovaSDK.DocumentationGroup>,
     page: SupernovaSDK.DocumentationPage
   ): SupernovaSDK.DocumentationPage | null {
     let root = UtilsUrls.rootGroup(sdkGroups)
-    let flattenedPages = UtilsUrls.flattenedPageStructure(root)
+    let flattenedPages = UtilsLookup.flattenedPageStructure(root)
     let pageIndex = flattenedPages.findIndex((p) => p.id === page.id)
     if (pageIndex > 0) {
       return flattenedPages[pageIndex - 1]
@@ -122,7 +110,7 @@ export class UtilsUrls {
     page: SupernovaSDK.DocumentationPage
   ): SupernovaSDK.DocumentationPage | null {
     let root = UtilsUrls.rootGroup(sdkGroups)
-    let flattenedPages = UtilsUrls.flattenedPageStructure(root)
+    let flattenedPages = UtilsLookup.flattenedPageStructure(root)
     let pageIndex = flattenedPages.findIndex((p) => p.id === page.id)
     if (pageIndex !== -1) {
       if (pageIndex < flattenedPages.length - 1) {

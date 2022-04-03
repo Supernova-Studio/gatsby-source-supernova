@@ -1,6 +1,6 @@
 {
     "name": "@supernovaio/gatsby-source-supernova",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "description": "Supernova source plugin for building design system documentation websites using Supernova design system platform",
     "main": "build/gatsby-source-supernova.js",
     "scripts": {

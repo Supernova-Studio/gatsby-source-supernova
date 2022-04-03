@@ -11,6 +11,7 @@
 
 import * as SupernovaSDK from "@supernovaio/supernova-sdk"
 import { Unit, Alignment, RichTextSpanAttributeType, FrameLayout, DocumentationPageBlockType, FrameAlignment, DocumentationPageBlock, DocumentationPageBlockText, DocumentationPageBlockHeading, DocumentationPageBlockCode, DocumentationPageBlockQuote, DocumentationPageBlockCallout, DocumentationPageBlockDivider, DocumentationPageBlockImage, DocumentationPageBlockToken, DocumentationPageBlockTokenList, DocumentationPageBlockTokenGroup, DocumentationPageBlockShortcuts, DocumentationPageBlockEmbedFigma, DocumentationPageBlockEmbedYoutube, DocumentationPageBlockEmbedStorybook, DocumentationPageBlockEmbedGeneric, DocumentationPageBlockFrames, DocumentationPageBlockCustom, DocumentationPageBlockRenderCode, DocumentationPageBlockAssets, DocumentationPageBlockShortcut, DocumentationPageBlockFrame, DocumentationPageBlockAsset, DocumentationPageBlockUnorderedList, DocumentationPageBlockOrderedList, DocumentationPageBlockLink, DocumentationPageBlockTextRich, HeadingType, ShortcutType, CalloutType, SandboxType, CustomBlockPropertyType, DocumentationPageBlockColumn, DocumentationPageBlockColumnItem, DocumentationPageBlockTabs, DocumentationPageBlockTabItem, DocumentationPageBlockTable, DocumentationPageBlockTableColumn, DocumentationPageBlockTableRow, DocumentationPageBlockTableCell, DocumentationCustomBlockProperty, MultitypeValue } from "gql_types/SupernovaTypes"
+import { UtilsLookup } from "./convenience/UtilLookup"
 import { PARENT_SOURCE } from "./SDKGraphQLAssetConvertor"
 import { SDKGraphQLObjectConvertor } from "./SDKGraphQLObjectConvertor"
 
@@ -26,7 +27,7 @@ export class SDKGraphQLDocBlockConvertor {
   documentationPageBlocks(sdkPage: SupernovaSDK.DocumentationPage): Array<DocumentationPageBlock> {
 
     let graphQLNodes: Array<DocumentationPageBlock> = []
-    let blocks = this.flattenedBlocksOfPage(sdkPage)
+    let blocks = UtilsLookup.flattenedBlocksOfPage(sdkPage)
     for (let block of blocks) {
       graphQLNodes.push(this.convertBlockToGraphQL(block))
     }
@@ -656,25 +657,5 @@ export class SDKGraphQLDocBlockConvertor {
       case SupernovaSDK.DocumentationPageBlockType.tableCell: return DocumentationPageBlockType.tableCell
       case SupernovaSDK.DocumentationPageBlockType.tableRow: return DocumentationPageBlockType.tableRow
     }
-  }
-
-  // --- Convenience
-
-  flattenedBlocksOfPage(page: SupernovaSDK.DocumentationPage): Array<SupernovaSDK.DocumentationPageBlock> {
-
-    let blocks: Array<SupernovaSDK.DocumentationPageBlock> = []
-    for (let block of page.blocks) {
-      blocks = blocks.concat(this.flattenedBlocksOfBlock(block))
-    }
-    return blocks
-  }
-
-  flattenedBlocksOfBlock(block: SupernovaSDK.DocumentationPageBlock): Array<SupernovaSDK.DocumentationPageBlock> {
-
-    let blocks: Array<SupernovaSDK.DocumentationPageBlock> = [block]
-    for (let child of block.children) {
-      blocks = blocks.concat(this.flattenedBlocksOfBlock(child))
-    }
-    return blocks
   }
 }

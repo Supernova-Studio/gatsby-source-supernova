@@ -455,3 +455,18 @@ type ExporterContribution {
     customConfigurationProperties: [ExporterConfigurationProperty]!
     customBlockVariants: [ExporterBlockVariant]!
 }
+
+
+type SearchIndexEntry implements Node @dontInfer {
+  id: String!
+  text: String!
+  origin: SearchIndexOrigin!
+}
+
+type SearchIndexOrigin {
+  pageId: String
+  groupId: String
+  blockId: String
+  blockType: String
+  type: String!
+}

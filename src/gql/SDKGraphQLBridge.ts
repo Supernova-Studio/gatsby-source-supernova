@@ -12,6 +12,7 @@
 import * as SupernovaSDK from "@supernovaio/supernova-sdk"
 import { Supernova } from "@supernovaio/supernova-sdk"
 import { DocumentationPage, DocumentationPageBlock, DocumentationGroup, DocumentationConfiguration, Asset, Token, TokenGroup, ExporterCustomBlock, ExporterCustomBlockVariant, ExporterConfigurationProperty } from "../gql_types/SupernovaTypes"
+import { UtilsLookup } from "./convenience/UtilLookup"
 import { SDKGraphQLAssetConvertor } from "./SDKGraphQLAssetConvertor"
 import { SDKGraphQLDocBlockConvertor } from "./SDKGraphQLDocBlockConvertor"
 import { SDKGraphQLObjectConvertor } from "./SDKGraphQLObjectConvertor"
@@ -72,7 +73,7 @@ export class SDKGraphQLBridge {
     let graphQLNodes: Array<DocumentationPageBlock> = []
 
     for (let page of pages) {
-      let pageBlocks = this.docBlockConvertor.flattenedBlocksOfPage(page)
+      let pageBlocks = UtilsLookup.flattenedBlocksOfPage(page)
       let graphQLBlocks = this.docBlockConvertor.documentationPageBlocks(page)
       blocks = pageBlocks.concat(blocks)
       graphQLNodes = graphQLBlocks.concat(graphQLNodes)

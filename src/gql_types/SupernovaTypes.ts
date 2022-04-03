@@ -228,11 +228,8 @@ export enum ExporterConfigurationPropertyInputType {
 export type GraphQLNode = {
   id: string
   internal: any
-  /* Internal properties that are not exposed
   parent: any
-  internal: any
-  children: Array<any>
-  */ 
+  children: any
 }
 
 export type DocumentationItem = GraphQLNode & {
@@ -836,3 +833,18 @@ export type MultitypeTypographyValue = {
   aliasTo: string | null,
   value: TypographyTokenValue
 }
+
+export type SearchIndexEntry = GraphQLNode & {
+  id: string,
+  text: string,
+  origin: SearchIndexOrigin
+}
+
+export type SearchIndexOrigin = {
+  pageId: string | null
+  groupId: string | null
+  blockId: string | null
+  blockType: string | null
+  type: "page" | "group" | "block"
+}
+

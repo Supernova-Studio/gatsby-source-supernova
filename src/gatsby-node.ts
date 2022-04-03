@@ -12,6 +12,7 @@
 import { Supernova } from '@supernovaio/supernova-sdk'
 import { SupernovaPluginOptions } from './types'
 import { SDKGraphQLBridge } from './gql/SDKGraphQLBridge'
+import { SDKGraphQLSearchIndex } from './gql/search/SDKGraphQLSearchIndex'
 
 
 // --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- --- ---
@@ -51,10 +52,16 @@ export async function sourceNodes({ actions }: { actions: any }, pluginOptions: 
   let tokenGroupResult = await bridge.tokenGroups()
   tokenGroupResult.graphQLNodes.forEach(n => actions.createNode(n))
 
+  // Create Search index
+  let indexer = new SDKGraphQLSearchIndex(pluginOptions.searchOptions)
+  let searchNodes = indexer.buildSearchIndex(pageResult.sdkObjects, groupResult.sdkObjects)
+  searchNodes.graphQLNodes.forEach(n => actions.createNode(n))
+
   // TODO: Exporter fetching
   // let exporterResult = await bridge.exporters()
   // exporterResult.graphQLNodes.forEach(n => actions.createNode(n))
 
+  // Fetch configuration
   let customBlockResult = await bridge.documentationCustomBlocks()
   customBlockResult.graphQLNodes.forEach(n => actions.createNode(n))
 
@@ -532,6 +539,21 @@ export async function createSchemaCustomization({ actions }: { actions: any }) {
       customBlocks: [ExporterBlock]!
       customConfigurationProperties: [ExporterConfigurationProperty]!
       customBlockVariants: [ExporterBlockVariant]!
+  }
+  
+  
+  type SearchIndexEntry implements Node @dontInfer {
+    id: String!
+    text: String!
+    origin: SearchIndexOrigin!
+  }
+  
+  type SearchIndexOrigin {
+    pageId: String
+    groupId: String
+    blockId: String
+    blockType: String
+    type: String!
   }
   `
 
